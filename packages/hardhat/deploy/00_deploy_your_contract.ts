@@ -1,44 +1,27 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
 import { DeployFunction } from "hardhat-deploy/types";
-import { Contract } from "ethers";
 
 /**
- * Deploys a contract named "YourContract" using the deployer account and
- * constructor arguments set to the deployer address
+ * This is a placeholder deployment script.
  *
- * @param hre HardhatRuntimeEnvironment object.
+ * The Microloans MVP contracts are deployed in the following order:
+ * 1. MockUSDT (03_deploy_mock_usdt.ts) - Test stablecoin
+ * 2. CropNFT (01_deploy_crop_nft.ts) - ERC721 for crop representation
+ * 3. MicroLoan (02_deploy_microloan.ts) - Main loan contract
+ *
+ * To deploy all contracts: yarn deploy
+ * To deploy specific contracts: yarn deploy --tags [ContractName]
  */
-const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  /*
-    On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
+const deployPlaceholder: DeployFunction = async function () {
+  console.log("📋 Microloans MVP Deployment Info:");
+  console.log("   Run 'yarn deploy' to deploy all contracts");
+  console.log("   Deployment order: MockUSDT → CropNFT → MicroLoan");
 
-    When deploying to live networks (e.g `yarn deploy --network sepolia`), the deployer account
-    should have sufficient balance to pay for the gas fees for contract creation.
-
-    You can generate a random account with `yarn generate` or `yarn account:import` to import your
-    existing PK which will fill DEPLOYER_PRIVATE_KEY_ENCRYPTED in the .env file (then used on hardhat.config.ts)
-    You can run the `yarn account` command to check your balance in every network.
-  */
-  const { deployer } = await hre.getNamedAccounts();
-  const { deploy } = hre.deployments;
-
-  await deploy("YourContract", {
-    from: deployer,
-    // Contract constructor arguments
-    args: [deployer],
-    log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
-    autoMine: true,
-  });
-
-  // Get the deployed contract to interact with it after deploying.
-  const yourContract = await hre.ethers.getContract<Contract>("YourContract", deployer);
-  console.log("👋 Initial greeting:", await yourContract.greeting());
+  // Skip this placeholder during actual deployment
+  return true;
 };
 
-export default deployYourContract;
+export default deployPlaceholder;
 
-// Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["YourContract"];
+// Skip this during deployment
+deployPlaceholder.skip = async () => true;
+deployPlaceholder.tags = ["Placeholder"];
