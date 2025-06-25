@@ -40,12 +40,12 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <SparklesIcon className="h-4 w-4" />,
   },
   {
-    label: "Request Loan",
-    href: "/request-loan",
+    label: "Request Investment",
+    href: "/request-investment",
     icon: <CurrencyDollarIcon className="h-4 w-4" />,
   },
   {
-    label: "Fund Loans",
+    label: "Make Investments",
     href: "/fund",
     icon: <WalletIcon className="h-4 w-4" />,
   },
@@ -122,11 +122,11 @@ export const Header = () => {
         </div>
         <Link href="/" passHref className="hidden lg:flex items-center gap-2 ml-4 mr-6 shrink-0">
           <div className="flex relative w-10 h-10">
-            <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
+            <Image alt="Harvverse logo" className="cursor-pointer" fill src="/android-chrome-512x512.png" />
           </div>
           <div className="flex flex-col">
             <span className="font-bold leading-tight">HarvVerse</span>
-            <span className="text-xs">Microloans for Farmers</span>
+            <span className="text-xs">Farm Investments & Finance</span>
           </div>
         </Link>
         <ul className="hidden lg:flex lg:flex-nowrap menu menu-horizontal px-1 gap-2">

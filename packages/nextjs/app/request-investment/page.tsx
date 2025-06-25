@@ -17,10 +17,10 @@ interface NFTData {
   tokenURI: string;
 }
 
-const RequestLoanPage = () => {
+const RequestInvestmentPage = () => {
   const { address: connectedAddress } = useAccount();
   const [selectedNFT, setSelectedNFT] = useState<string>("");
-  const [loanAmount, setLoanAmount] = useState("");
+  const [investmentAmount, setInvestmentAmount] = useState("");
   const [userNFTs, setUserNFTs] = useState<NFTData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -79,8 +79,8 @@ const RequestLoanPage = () => {
     fetchUserNFTs();
   }, [nftBalance, connectedAddress, cropNFTContract]);
 
-  const handleRequestLoan = async () => {
-    if (!selectedNFT || !loanAmount || !cropNFTInfo || !microLoanInfo) {
+  const handleRequestInvestment = async () => {
+    if (!selectedNFT || !investmentAmount || !cropNFTInfo || !microLoanInfo) {
       notification.error("Please fill all fields and ensure contracts are loaded");
       return;
     }
@@ -94,18 +94,18 @@ const RequestLoanPage = () => {
         args: [microLoanInfo.address, BigInt(selectedNFT)],
       });
 
-      // Then request the loan (ETH - no token address needed)
+      // Then request the investment funding (ETH - no token address needed)
       await writeMicroLoan({
         functionName: "requestLoan",
-        args: [cropNFTInfo.address, BigInt(selectedNFT), parseEther(loanAmount)],
+        args: [cropNFTInfo.address, BigInt(selectedNFT), parseEther(investmentAmount)],
       });
 
-      notification.success("Loan requested successfully!");
+      notification.success("Investment request submitted successfully!");
       setSelectedNFT("");
-      setLoanAmount("");
+      setInvestmentAmount("");
     } catch (error) {
-      console.error("Error requesting loan:", error);
-      notification.error("Failed to request loan");
+      console.error("Error requesting investment:", error);
+      notification.error("Failed to request investment");
     } finally {
       setIsLoading(false);
     }
@@ -124,13 +124,13 @@ const RequestLoanPage = () => {
     <div className="flex items-center flex-col flex-grow pt-10">
       <div className="px-5 w-full max-w-2xl">
         <h1 className="text-center mb-8">
-          <span className="block text-4xl font-bold">Request Loan</span>
-          <span className="block text-2xl mt-2">Use your CropNFT as collateral</span>
+          <span className="block text-4xl font-bold">Request Investment</span>
+          <span className="block text-2xl mt-2">Use your CropNFT as collateral for investment funding</span>
         </h1>
 
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl mb-4">Loan Details</h2>
+            <h2 className="card-title text-2xl mb-4">Investment Details</h2>
 
             {userNFTs.length === 0 ? (
               <div className="alert alert-warning">
@@ -171,9 +171,13 @@ const RequestLoanPage = () => {
 
                 <div className="form-control w-full mt-4">
                   <label className="label">
-                    <span className="label-text text-lg">Loan Amount (ETH)</span>
+                    <span className="label-text text-lg">Investment Amount (ETH)</span>
                   </label>
-                  <EtherInput placeholder="Enter amount in ETH" value={loanAmount} onChange={setLoanAmount} />
+                  <EtherInput
+                    placeholder="Enter amount in ETH"
+                    value={investmentAmount}
+                    onChange={setInvestmentAmount}
+                  />
                 </div>
 
                 <div className="stats shadow mt-6">
@@ -193,8 +197,8 @@ const RequestLoanPage = () => {
                         ></path>
                       </svg>
                     </div>
-                    <div className="stat-title">Loan Terms</div>
-                    <div className="stat-value text-primary">5% Interest</div>
+                    <div className="stat-title">Investment Terms</div>
+                    <div className="stat-value text-primary">5% Returns</div>
                     <div className="stat-desc">90 days duration</div>
                   </div>
                 </div>
@@ -202,8 +206,8 @@ const RequestLoanPage = () => {
                 <div className="card-actions justify-end mt-6">
                   <button
                     className="btn btn-primary btn-lg"
-                    onClick={handleRequestLoan}
-                    disabled={isLoading || !selectedNFT || !loanAmount}
+                    onClick={handleRequestInvestment}
+                    disabled={isLoading || !selectedNFT || !investmentAmount}
                   >
                     {isLoading ? (
                       <>
@@ -211,7 +215,7 @@ const RequestLoanPage = () => {
                         Processing...
                       </>
                     ) : (
-                      "Request Loan"
+                      "Request Investment"
                     )}
                   </button>
                 </div>
@@ -225,9 +229,9 @@ const RequestLoanPage = () => {
             <h3 className="text-lg font-semibold">ℹ️ How it works</h3>
             <ol className="list-decimal list-inside space-y-2 text-sm">
               <li>Select your CropNFT to use as collateral</li>
-              <li>Enter the loan amount you need</li>
+              <li>Enter the investment amount you need</li>
               <li>Your NFT will be locked in the contract</li>
-              <li>Wait for a business to fund your loan</li>
+              <li>Wait for a business to fund your investment</li>
               <li>Repay within 90 days to get your NFT back</li>
             </ol>
           </div>
@@ -237,4 +241,4 @@ const RequestLoanPage = () => {
   );
 };
 
-export default RequestLoanPage;
+export default RequestInvestmentPage;

@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { formatEther } from "viem";
 import { useAccount } from "wagmi";
-import { Address, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { Address, EthDisplay, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { notification } from "~~/utils/scaffold-eth";
 
-interface LoanRequest {
+interface InvestmentRequest {
   loanId: bigint;
   borrower: string;
   nftContract: string;
@@ -17,17 +16,17 @@ interface LoanRequest {
 
 const FundPage = () => {
   const { address: connectedAddress } = useAccount();
-  const [loanRequests, setLoanRequests] = useState<LoanRequest[]>([]);
-  const [fundingLoanId, setFundingLoanId] = useState<bigint | null>(null);
+  const [investmentRequests, setInvestmentRequests] = useState<InvestmentRequest[]>([]);
+  const [fundingInvestmentId, setFundingInvestmentId] = useState<bigint | null>(null);
 
-  // Get loan request events
+  // Get investment request events
   const { data: loanRequestEvents } = useScaffoldEventHistory({
     contractName: "MicroLoan",
     eventName: "LoanRequested",
     fromBlock: 0n,
   });
 
-  // Get funded loan events
+  // Get funded investment events
   const { data: loanFundedEvents } = useScaffoldEventHistory({
     contractName: "MicroLoan",
     eventName: "LoanFunded",
@@ -36,13 +35,13 @@ const FundPage = () => {
 
   const { writeContractAsync: writeMicroLoan } = useScaffoldWriteContract("MicroLoan");
 
-  // Filter out already funded loans
+  // Filter out already funded investments
   useEffect(() => {
     if (!loanRequestEvents) return;
 
     const fundedLoanIds = new Set(loanFundedEvents?.map(event => event.args.loanId?.toString()) || []);
 
-    const openLoans = loanRequestEvents
+    const openInvestments = loanRequestEvents
       .filter(event => !fundedLoanIds.has(event.args.loanId?.toString()))
       .map(event => ({
         loanId: event.args.loanId || 0n,
@@ -52,26 +51,26 @@ const FundPage = () => {
         amount: event.args.amount || 0n,
       }));
 
-    setLoanRequests(openLoans);
+    setInvestmentRequests(openInvestments);
   }, [loanRequestEvents, loanFundedEvents]);
 
-  const handleFundLoan = async (loanId: bigint, amount: bigint) => {
+  const handleFundInvestment = async (loanId: bigint, amount: bigint) => {
     try {
-      setFundingLoanId(loanId);
+      setFundingInvestmentId(loanId);
 
-      // Fund the loan with ETH
+      // Fund the investment with ETH
       await writeMicroLoan({
         functionName: "fundLoan",
         args: [loanId],
         value: amount, // Send ETH amount directly
       });
 
-      notification.success("Loan funded successfully!");
+      notification.success("Investment funded successfully!");
     } catch (error) {
-      console.error("Error funding loan:", error);
-      notification.error("Failed to fund loan");
+      console.error("Error funding investment:", error);
+      notification.error("Failed to fund investment");
     } finally {
-      setFundingLoanId(null);
+      setFundingInvestmentId(null);
     }
   };
 
@@ -88,45 +87,47 @@ const FundPage = () => {
     <div className="flex items-center flex-col flex-grow pt-10">
       <div className="px-5 w-full max-w-6xl">
         <h1 className="text-center mb-8">
-          <span className="block text-4xl font-bold">Fund Loans</span>
-          <span className="block text-2xl mt-2">Provide liquidity to farmers</span>
+          <span className="block text-4xl font-bold">Make Investments</span>
+          <span className="block text-2xl mt-2">Fund agricultural projects and earn returns</span>
         </h1>
 
-        {loanRequests.length === 0 ? (
+        {investmentRequests.length === 0 ? (
           <div className="card bg-base-100 shadow-xl">
             <div className="card-body text-center">
-              <h2 className="text-2xl font-bold mb-4">No Open Loan Requests</h2>
-              <p>There are currently no loan requests waiting for funding.</p>
+              <h2 className="text-2xl font-bold mb-4">No Open Investment Requests</h2>
+              <p>There are currently no investment requests waiting for funding.</p>
             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {loanRequests.map(loan => (
-              <div key={loan.loanId.toString()} className="card bg-base-100 shadow-xl">
+            {investmentRequests.map(investment => (
+              <div key={investment.loanId.toString()} className="card bg-base-100 shadow-xl">
                 <div className="card-body">
-                  <h2 className="card-title">Loan #{loan.loanId.toString()}</h2>
+                  <h2 className="card-title">Investment #{investment.loanId.toString()}</h2>
 
                   <div className="space-y-2">
                     <div>
-                      <span className="text-sm opacity-70">Borrower:</span>
-                      <Address address={loan.borrower} />
+                      <span className="text-sm opacity-70">Farmer:</span>
+                      <Address address={investment.borrower} />
                     </div>
 
                     <div>
                       <span className="text-sm opacity-70">Amount:</span>
-                      <p className="text-lg font-bold">{formatEther(loan.amount)} ETH</p>
+                      <div className="text-lg font-bold">
+                        <EthDisplay amount={investment.amount} />
+                      </div>
                     </div>
 
                     <div>
                       <span className="text-sm opacity-70">Collateral:</span>
-                      <p className="text-sm">CropNFT #{loan.nftTokenId.toString()}</p>
+                      <p className="text-sm">CropNFT #{investment.nftTokenId.toString()}</p>
                     </div>
 
                     <div className="divider"></div>
 
                     <div className="stats stats-vertical shadow">
                       <div className="stat py-2">
-                        <div className="stat-title text-xs">Interest</div>
+                        <div className="stat-title text-xs">Returns</div>
                         <div className="stat-value text-sm">5%</div>
                       </div>
                       <div className="stat py-2">
@@ -136,7 +137,10 @@ const FundPage = () => {
                       <div className="stat py-2">
                         <div className="stat-title text-xs">Total Return</div>
                         <div className="stat-value text-sm text-success">
-                          {formatEther(loan.amount + (loan.amount * 5n) / 100n)} ETH
+                          <EthDisplay
+                            amount={investment.amount + (investment.amount * 5n) / 100n}
+                            className="text-sm"
+                          />
                         </div>
                       </div>
                     </div>
@@ -145,16 +149,16 @@ const FundPage = () => {
                   <div className="card-actions justify-end mt-4">
                     <button
                       className="btn btn-primary"
-                      onClick={() => handleFundLoan(loan.loanId, loan.amount)}
-                      disabled={fundingLoanId === loan.loanId}
+                      onClick={() => handleFundInvestment(investment.loanId, investment.amount)}
+                      disabled={fundingInvestmentId === investment.loanId}
                     >
-                      {fundingLoanId === loan.loanId ? (
+                      {fundingInvestmentId === investment.loanId ? (
                         <>
                           <span className="loading loading-spinner loading-sm"></span>
                           Funding...
                         </>
                       ) : (
-                        "Fund Loan"
+                        "Fund Investment"
                       )}
                     </button>
                   </div>
@@ -166,10 +170,11 @@ const FundPage = () => {
 
         <div className="mt-8 card bg-base-200">
           <div className="card-body">
-            <h3 className="text-lg font-semibold">💼 Business Opportunity</h3>
+            <h3 className="text-lg font-semibold">💼 Investment Opportunity</h3>
             <p className="text-sm">
-              Fund microloans to earn 5% interest over 90 days. All loans are secured by CropNFT collateral. If a
-              borrower defaults, you&apos;ll receive the NFT which can be redeemed for the underlying crop value.
+              Fund agricultural investments to earn 5% returns over 90 days. All investments are secured by CropNFT
+              collateral. If a farmer defaults, you&apos;ll receive the NFT which can be redeemed for the underlying
+              crop value.
             </p>
           </div>
         </div>

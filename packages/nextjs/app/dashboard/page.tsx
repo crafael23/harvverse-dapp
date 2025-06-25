@@ -2,12 +2,11 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { formatEther } from "viem";
 import { useAccount } from "wagmi";
-import { Address, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
+import { Address, EthDisplay, RainbowKitCustomConnectButton } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
-interface UserLoan {
+interface UserInvestment {
   loanId: bigint;
   role: "borrower" | "lender";
   counterparty: string;
@@ -18,10 +17,10 @@ interface UserLoan {
 
 const DashboardPage = () => {
   const { address: connectedAddress } = useAccount();
-  const [userLoans, setUserLoans] = useState<UserLoan[]>([]);
-  const [userRole, setUserRole] = useState<"farmer" | "business" | "both">("farmer");
+  const [userInvestments, setUserInvestments] = useState<UserInvestment[]>([]);
+  const [userRole, setUserRole] = useState<"farmer" | "investor" | "both">("farmer");
 
-  // Get all loan events
+  // Get all investment events
   const { data: loanRequestEvents } = useScaffoldEventHistory({
     contractName: "MicroLoan",
     eventName: "LoanRequested",
@@ -49,11 +48,11 @@ const DashboardPage = () => {
   useEffect(() => {
     if (!connectedAddress) return;
 
-    const loans: UserLoan[] = [];
+    const investments: UserInvestment[] = [];
     let isFarmer = false;
-    let isBusiness = false;
+    let isInvestor = false;
 
-    // Process loan requests where user is borrower
+    // Process investment requests where user is borrower
     loanRequestEvents?.forEach(event => {
       if (event.args.borrower === connectedAddress) {
         isFarmer = true;
@@ -64,7 +63,7 @@ const DashboardPage = () => {
         const repaidEvent = loanRepaidEvents?.find(e => e.args.loanId === loanId);
         const liquidatedEvent = loanLiquidatedEvents?.find(e => e.args.loanId === loanId);
 
-        let status: UserLoan["status"] = "requested";
+        let status: UserInvestment["status"] = "requested";
         let counterparty = "";
 
         if (liquidatedEvent) {
@@ -78,7 +77,7 @@ const DashboardPage = () => {
           counterparty = fundedEvent.args.lender || "";
         }
 
-        loans.push({
+        investments.push({
           loanId,
           role: "borrower",
           counterparty,
@@ -89,22 +88,22 @@ const DashboardPage = () => {
       }
     });
 
-    // Process funded loans where user is lender
+    // Process funded investments where user is lender
     loanFundedEvents?.forEach(event => {
       if (event.args.lender === connectedAddress) {
-        isBusiness = true;
+        isInvestor = true;
         const loanId = event.args.loanId || 0n;
 
-        // Get loan details from request event
+        // Get investment details from request event
         const requestEvent = loanRequestEvents?.find(e => e.args.loanId === loanId);
         const repaidEvent = loanRepaidEvents?.find(e => e.args.loanId === loanId);
         const liquidatedEvent = loanLiquidatedEvents?.find(e => e.args.loanId === loanId);
 
-        let status: UserLoan["status"] = "funded";
+        let status: UserInvestment["status"] = "funded";
         if (liquidatedEvent) status = "liquidated";
         else if (repaidEvent) status = "repaid";
 
-        loans.push({
+        investments.push({
           loanId,
           role: "lender",
           counterparty: requestEvent?.args.borrower || "",
@@ -115,14 +114,14 @@ const DashboardPage = () => {
       }
     });
 
-    setUserLoans(loans);
+    setUserInvestments(investments);
 
-    if (isFarmer && isBusiness) setUserRole("both");
-    else if (isBusiness) setUserRole("business");
+    if (isFarmer && isInvestor) setUserRole("both");
+    else if (isInvestor) setUserRole("investor");
     else setUserRole("farmer");
   }, [connectedAddress, loanRequestEvents, loanFundedEvents, loanRepaidEvents, loanLiquidatedEvents]);
 
-  const getStatusBadge = (status: UserLoan["status"]) => {
+  const getStatusBadge = (status: UserInvestment["status"]) => {
     const badges = {
       requested: <span className="badge badge-warning">Requested</span>,
       funded: <span className="badge badge-info">Funded</span>,
@@ -148,9 +147,9 @@ const DashboardPage = () => {
           <span className="block text-4xl font-bold">Dashboard</span>
           <span className="block text-2xl mt-2">
             {userRole === "both"
-              ? "Farmer & Business"
-              : userRole === "business"
-                ? "Business Account"
+              ? "Farmer & Investor"
+              : userRole === "investor"
+                ? "Investor Account"
                 : "Farmer Account"}
           </span>
         </h1>
@@ -162,31 +161,31 @@ const DashboardPage = () => {
               <Link href="/mint" className="btn btn-primary btn-lg">
                 🌾 Mint CropNFT
               </Link>
-              <Link href="/request-loan" className="btn btn-secondary btn-lg">
-                💰 Request Loan
+              <Link href="/request-investment" className="btn btn-secondary btn-lg">
+                💰 Request Investment
               </Link>
             </>
           )}
-          {(userRole === "business" || userRole === "both") && (
+          {(userRole === "investor" || userRole === "both") && (
             <Link href="/fund" className="btn btn-accent btn-lg">
-              💸 Fund Loans
+              💸 Make Investments
             </Link>
           )}
         </div>
 
-        {/* User Loans */}
+        {/* User Investments */}
         <div className="card bg-base-100 shadow-xl">
           <div className="card-body">
-            <h2 className="card-title text-2xl mb-4">Your Loans</h2>
+            <h2 className="card-title text-2xl mb-4">Your Investments</h2>
 
-            {userLoans.length === 0 ? (
-              <p className="text-center py-8">No loans found</p>
+            {userInvestments.length === 0 ? (
+              <p className="text-center py-8">No investments found</p>
             ) : (
               <div className="overflow-x-auto">
                 <table className="table table-zebra">
                   <thead>
                     <tr>
-                      <th>Loan ID</th>
+                      <th>Investment ID</th>
                       <th>Role</th>
                       <th>Counterparty</th>
                       <th>Amount</th>
@@ -195,26 +194,20 @@ const DashboardPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {userLoans.map(loan => (
-                      <tr key={loan.loanId.toString()}>
-                        <td>#{loan.loanId.toString()}</td>
+                    {userInvestments.map(investment => (
+                      <tr key={investment.loanId.toString()}>
+                        <td>#{investment.loanId.toString()}</td>
+                        <td className="capitalize">{investment.role === "borrower" ? "Farmer" : "Investor"}</td>
                         <td>
-                          <span className={`badge ${loan.role === "borrower" ? "badge-primary" : "badge-secondary"}`}>
-                            {loan.role}
-                          </span>
+                          <Address address={investment.counterparty} />
                         </td>
                         <td>
-                          {loan.counterparty ? (
-                            <Address address={loan.counterparty} />
-                          ) : (
-                            <span className="text-gray-500">Waiting...</span>
-                          )}
+                          <EthDisplay amount={investment.amount} className="text-sm" />
                         </td>
-                        <td>{formatEther(loan.amount)} ETH</td>
-                        <td>{getStatusBadge(loan.status)}</td>
+                        <td>{getStatusBadge(investment.status)}</td>
                         <td>
-                          <Link href={`/loan/${loan.loanId.toString()}`} className="btn btn-sm btn-ghost">
-                            View →
+                          <Link href={`/investment/${investment.loanId}`} className="btn btn-sm btn-primary">
+                            View Details
                           </Link>
                         </td>
                       </tr>
@@ -226,30 +219,10 @@ const DashboardPage = () => {
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="stats shadow mt-8 w-full">
-          <div className="stat">
+        {/* Statistics */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+          <div className="stat bg-base-100 shadow-xl rounded-lg">
             <div className="stat-figure text-primary">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block w-8 h-8 stroke-current"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                ></path>
-              </svg>
-            </div>
-            <div className="stat-title">Total Loans</div>
-            <div className="stat-value text-primary">{userLoans.length}</div>
-          </div>
-
-          <div className="stat">
-            <div className="stat-figure text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -264,12 +237,13 @@ const DashboardPage = () => {
                 ></path>
               </svg>
             </div>
-            <div className="stat-title">Active Loans</div>
-            <div className="stat-value text-secondary">{userLoans.filter(l => l.status === "funded").length}</div>
+            <div className="stat-title">Total Investments</div>
+            <div className="stat-value text-primary">{userInvestments.length}</div>
+            <div className="stat-desc">All time</div>
           </div>
 
-          <div className="stat">
-            <div className="stat-figure text-success">
+          <div className="stat bg-base-100 shadow-xl rounded-lg">
+            <div className="stat-figure text-secondary">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -280,12 +254,47 @@ const DashboardPage = () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth="2"
-                  d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
+                  d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4"
                 ></path>
               </svg>
             </div>
-            <div className="stat-title">Completed</div>
-            <div className="stat-value text-success">{userLoans.filter(l => l.status === "repaid").length}</div>
+            <div className="stat-title">Active</div>
+            <div className="stat-value text-secondary">{userInvestments.filter(i => i.status === "funded").length}</div>
+            <div className="stat-desc">Currently funded</div>
+          </div>
+
+          <div className="stat bg-base-100 shadow-xl rounded-lg">
+            <div className="stat-figure text-accent">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                className="inline-block w-8 h-8 stroke-current"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
+                ></path>
+              </svg>
+            </div>
+            <div className="stat-title">Volume</div>
+            <div className="stat-value text-accent">
+              <EthDisplay
+                amount={userInvestments.reduce((total, investment) => total + investment.amount, 0n)}
+                className="text-2xl"
+                showBoth={false}
+              />
+            </div>
+            <div className="stat-desc">
+              <EthDisplay
+                amount={userInvestments.reduce((total, investment) => total + investment.amount, 0n)}
+                className="text-xs"
+                showUsd={true}
+                showBoth={false}
+              />
+            </div>
           </div>
         </div>
       </div>
