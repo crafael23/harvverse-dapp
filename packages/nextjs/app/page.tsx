@@ -26,25 +26,23 @@ const Home: NextPage = () => {
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <h2 className="text-2xl font-bold mb-4">For Farmers 🌾</h2>
               <p className="mb-6">
-                Mint CropNFTs and use them as collateral to access quick investment funding for your agricultural needs.
+                Mint CropNFTs and propose investment agreements. Choose delivery or profit-sharing terms.
               </p>
               <div className="flex flex-col gap-2">
                 <Link href="/mint" className="btn btn-primary">
                   Mint CropNFT
                 </Link>
-                <Link href="/request-investment" className="btn btn-secondary">
-                  Request Investment
+                <Link href="/create-deal" className="btn btn-secondary">
+                  Create Deal
                 </Link>
               </div>
             </div>
 
             <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
               <h2 className="text-2xl font-bold mb-4">For Investors 💼</h2>
-              <p className="mb-6">
-                Make agricultural investments to earn 5% returns while supporting local farmers and agriculture.
-              </p>
-              <Link href="/fund" className="btn btn-accent">
-                Make Investments
+              <p className="mb-6">Fund agricultural deals and choose between receiving produce or sharing profits.</p>
+              <Link href="/invest" className="btn btn-accent">
+                Browse Deals
               </Link>
             </div>
           </div>
@@ -65,23 +63,29 @@ const Home: NextPage = () => {
 
         <div className="px-8 py-12 w-full">
           <h2 className="text-3xl font-bold text-center mb-8">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-6xl mx-auto">
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
-                <h3 className="card-title">1. Mint CropNFT</h3>
-                <p>Farmers create NFTs representing their crop lots with metadata stored on IPFS</p>
+                <h3 className="card-title">1. Create Deal</h3>
+                <p>Farmers mint CropNFTs and propose investment terms with custom profit-sharing or delivery options</p>
               </div>
             </div>
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
-                <h3 className="card-title">2. Request Investment</h3>
-                <p>Use your CropNFT as collateral to request investment funding with 5% returns for investors</p>
+                <h3 className="card-title">2. Choose Option</h3>
+                <p>Investors fund deals and select either physical produce delivery or profit-sharing</p>
               </div>
             </div>
             <div className="card bg-base-100 shadow-xl">
               <div className="card-body">
-                <h3 className="card-title">3. Get Funded</h3>
-                <p>Investors fund agricultural projects to earn returns, with NFT collateral as security</p>
+                <h3 className="card-title">3. Harvest Ready</h3>
+                <p>Farmers mark crops ready for delivery or sale when harvest is complete</p>
+              </div>
+            </div>
+            <div className="card bg-base-100 shadow-xl">
+              <div className="card-body">
+                <h3 className="card-title">4. Settlement</h3>
+                <p>Oracle confirms delivery or farmer reports sale proceeds for automatic profit distribution</p>
               </div>
             </div>
           </div>

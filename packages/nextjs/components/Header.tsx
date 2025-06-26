@@ -40,13 +40,13 @@ export const menuLinks: HeaderMenuLink[] = [
     icon: <SparklesIcon className="h-4 w-4" />,
   },
   {
-    label: "Request Investment",
-    href: "/request-investment",
+    label: "Create Deal",
+    href: "/create-deal",
     icon: <CurrencyDollarIcon className="h-4 w-4" />,
   },
   {
     label: "Make Investments",
-    href: "/fund",
+    href: "/invest",
     icon: <WalletIcon className="h-4 w-4" />,
   },
   {

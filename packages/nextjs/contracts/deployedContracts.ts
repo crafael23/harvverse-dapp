@@ -654,6 +654,635 @@ const deployedContracts = {
         transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
       },
     },
+    InvestmentAgreement: {
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "_owner",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "_oracle",
+              type: "address",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "owner",
+              type: "address",
+            },
+          ],
+          name: "OwnableInvalidOwner",
+          type: "error",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "account",
+              type: "address",
+            },
+          ],
+          name: "OwnableUnauthorizedAccount",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "ReentrancyGuardReentrantCall",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "claimant",
+              type: "address",
+            },
+          ],
+          name: "AgreementDefaulted",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "investor",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "enum InvestmentAgreement.FulfilmentOption",
+              name: "option",
+              type: "uint8",
+            },
+          ],
+          name: "AgreementFunded",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "farmer",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "cropNFT",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "cropTokenId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "investAmount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "investorShareBps",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "expectedQuantity",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "harvestDeadline",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "deliveryOrSaleDeadline",
+              type: "uint256",
+            },
+          ],
+          name: "AgreementProposed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+          ],
+          name: "AgreementSettled",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "oracle",
+              type: "address",
+            },
+          ],
+          name: "DeliveryConfirmed",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "farmer",
+              type: "address",
+            },
+          ],
+          name: "HarvestMarkedReady",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "address",
+              name: "previousOwner",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "OwnershipTransferred",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "saleAmount",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "investorShare",
+              type: "uint256",
+            },
+          ],
+          name: "SaleReported",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "agreementCounter",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "agreements",
+          outputs: [
+            {
+              internalType: "address",
+              name: "farmer",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "investor",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "cropNFT",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "cropTokenId",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "investAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "investorShareBps",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "expectedQuantity",
+              type: "uint256",
+            },
+            {
+              internalType: "enum InvestmentAgreement.FulfilmentOption",
+              name: "option",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "harvestDeadline",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "deliveryOrSaleDeadline",
+              type: "uint256",
+            },
+            {
+              internalType: "enum InvestmentAgreement.AgreementStatus",
+              name: "status",
+              type: "uint8",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+          ],
+          name: "claimCollateral",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+          ],
+          name: "confirmDelivery",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              internalType: "enum InvestmentAgreement.FulfilmentOption",
+              name: "option",
+              type: "uint8",
+            },
+          ],
+          name: "fundAgreement",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+          ],
+          name: "getAgreement",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "farmer",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "investor",
+                  type: "address",
+                },
+                {
+                  internalType: "address",
+                  name: "cropNFT",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "cropTokenId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "investAmount",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "investorShareBps",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "expectedQuantity",
+                  type: "uint256",
+                },
+                {
+                  internalType: "enum InvestmentAgreement.FulfilmentOption",
+                  name: "option",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "harvestDeadline",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "deliveryOrSaleDeadline",
+                  type: "uint256",
+                },
+                {
+                  internalType: "enum InvestmentAgreement.AgreementStatus",
+                  name: "status",
+                  type: "uint8",
+                },
+              ],
+              internalType: "struct InvestmentAgreement.Agreement",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+          ],
+          name: "markHarvestReady",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+            {
+              internalType: "bytes",
+              name: "",
+              type: "bytes",
+            },
+          ],
+          name: "onERC721Received",
+          outputs: [
+            {
+              internalType: "bytes4",
+              name: "",
+              type: "bytes4",
+            },
+          ],
+          stateMutability: "pure",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "oracle",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "owner",
+          outputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "nftContract",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "nftTokenId",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "investAmount",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "investorShareBps",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "expectedQuantity",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "harvestDeadline",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "deliveryOrSaleDeadline",
+              type: "uint256",
+            },
+          ],
+          name: "proposeAgreement",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "renounceOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "agreementId",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "saleAmount",
+              type: "uint256",
+            },
+          ],
+          name: "reportSale",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "newOracle",
+              type: "address",
+            },
+          ],
+          name: "setOracle",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "newOwner",
+              type: "address",
+            },
+          ],
+          name: "transferOwnership",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {
+        onERC721Received: "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol",
+        owner: "@openzeppelin/contracts/access/Ownable.sol",
+        renounceOwnership: "@openzeppelin/contracts/access/Ownable.sol",
+        transferOwnership: "@openzeppelin/contracts/access/Ownable.sol",
+      },
+    },
     MicroLoan: {
       address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
