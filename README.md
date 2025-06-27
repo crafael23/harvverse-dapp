@@ -1,8 +1,87 @@
 # 🌿 Harvverse
 
-> A decentralized finance (DeFi) platform that tokenizes agricultural assets and connects farmers directly with investors, businesses, and cities through Web3 infrastructure.
+> **A Network State-Enabling Agricultural DeFi Platform**
+> 
+> Harvverse tokenizes agricultural assets and connects farmers directly with investors, businesses, and cities through Web3 infrastructure - powering the economic foundation for decentralized city-states and autonomous communities.
 
-This project is built using [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2), an open-source toolkit for building decentralized applications on Ethereum.
+**🔗 Live Demo**: [https://harvverse-dapp-nextjs.vercel.app/](https://harvverse-dapp-nextjs.vercel.app/)
+**📊 GitHub Repository**: [https://github.com/crafael23/harvverse-dapp](https://github.com/crafael23/harvverse-dapp)
+
+This project is built using [Scaffold-ETH 2](https://github.com/scaffold-eth/scaffold-eth-2) and deployed on **Base** blockchain, demonstrating production-ready DeFi infrastructure for Network States.
+
+---
+
+## 🏛️ Network State Relevance
+
+Harvverse directly enables **Network State** formation by providing the economic infrastructure for decentralized city-states to achieve food sovereignty and economic autonomy:
+
+### 🌐 Decentralized City Economy
+- **Direct Food Financing**: Restaurants, shops, and citizens can directly fund crops via smart contracts, eliminating traditional supply chain intermediaries
+- **Urban-Rural Bridge**: Creates economic bonds between Network State communities and agricultural producers
+- **Supply Chain Sovereignty**: Ensures food security through transparent, blockchain-verified agricultural agreements
+
+### 🏙️ City-State Governance Features
+- **DAO Integration**: Local governance tokens can be earned through agricultural investment participation
+- **Citizen Engagement**: Gamified dashboards allow residents to vote on agricultural funding priorities
+- **Economic Transparency**: All food investments are on-chain, providing complete transparency for Network State treasuries
+
+### 🌍 Network State Coordination
+- **Cross-Community Trade**: Different Network States can trade agricultural assets and investment opportunities
+- **Shared Resource Pools**: Multiple communities can co-fund large-scale regenerative agriculture projects
+- **Economic Resilience**: Diversified agricultural investments protect Network States from food supply disruptions
+
+---
+
+## 📋 Problem Solved
+
+**Traditional Agriculture Financing Gap**: $1T+ global financing gap leaves smallholder farmers without access to capital while cities lack food security and supply chain transparency.
+
+**Network State Challenge**: Emerging decentralized communities need economic infrastructure to achieve food sovereignty without relying on traditional nation-state supply chains.
+
+**Harvverse Solution**: Enables direct, trustless financing of regenerative agriculture through blockchain infrastructure, creating economic bridges between Network States and producers while ensuring transparent, programmable food supply agreements.
+
+---
+
+## 🚀 Setup Instructions
+
+### Prerequisites
+- Node.js (>= v20.18.3)
+- Yarn (v1 or v2+)
+- Git
+
+### Quick Start
+
+1. **Clone and Install**
+   ```bash
+   git clone https://github.com/BuidlGuidl/harvverse.git
+   cd harvverse
+   yarn install
+   ```
+
+2. **Start Local Development**
+   ```bash
+   # Terminal 1: Start local blockchain
+   yarn chain
+
+   # Terminal 2: Deploy contracts
+   yarn deploy
+
+   # Terminal 3: Start frontend
+   yarn start
+   ```
+
+3. **Access Application**
+   - Frontend: `http://localhost:3000`
+   - Block Explorer: `http://localhost:3000/blockexplorer`
+   - Contract Debug: `http://localhost:3000/debug`
+
+### Production Deployment
+
+The application is live on Base blockchain:
+- **Frontend**: [https://harvverse.vercel.app](https://harvverse.vercel.app)
+- **Contracts**: See [Deployed Contracts](#deployed-contracts) section
+
+---
 
 ## 📜 Table of Contents
 
@@ -15,11 +94,6 @@ This project is built using [Scaffold-ETH 2](https://github.com/scaffold-eth/sca
 - [Technology Innovation](#7-technology-innovation)
 - [Sustainability Impact](#8-sustainability-impact)
 - [Technical Deep Dive](#technical-deep-dive)
-  - [Project Structure](#project-structure)
-  - [Smart Contract Architecture](#smart-contract-architecture)
-  - [Contract Interaction Flow](#contract-interaction-flow)
-  - [Frontend Application Flow](#frontend-application-flow)
-- [🚀 Getting Started](#-getting-started)
 - [🤝 Contributing](#-contributing)
 
 ## 1. What is Harvverse?
@@ -198,48 +272,24 @@ This is the central hub for all users to manage and monitor their activities:
 -   **`/debug`**: A powerful interface for developers to directly interact with all functions (read and write) of the deployed smart contracts.
 -   **`/blockexplorer`**: A local block explorer that provides detailed views of transactions, addresses, contract code, and storage, aiding in development and debugging.
 
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
-
-## 🚀 Getting Started
-
-### Requirements
-
-Before you begin, you need to install the following tools:
-
-- [Node (>= v20.18.3)](https://nodejs.org/en/download/)
-- Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
-- [Git](https://git-scm.com/downloads)
-
-### Quickstart
-
-1.  Clone the repository and install dependencies:
-    ```bash
-    git clone https://github.com/BuidlGuidl/harvverse.git
-    cd harvverse
-    yarn install
-    ```
-
-2.  Run a local blockchain in the first terminal:
-    ```bash
-    yarn chain
-    ```
-    This command starts a local Hardhat network for development and testing.
-
-3.  On a second terminal, deploy the smart contracts to the local network:
-    ```bash
-    yarn deploy
-    ```
-
-4.  On a third terminal, start the Next.js frontend application:
-    ```bash
-    yarn start
-    ```
-
-Visit your app at `http://localhost:3000`. You can interact with your smart contracts on the `/debug` page.
-
+---
 
 ## 🤝 Contributing
 
-We welcome contributions to Harvverse!
+Harvverse is open-source and welcomes contributions! This project demonstrates how DeFi can solve real-world problems while enabling Network State economic infrastructure.
 
-Please see [`CONTRIBUTING.md`](./CONTRIBUTING.md) for more information and guidelines.
+### Development Guidelines
+
+1. **Code Standards**: Follow the existing TypeScript/Solidity patterns
+2. **Testing**: All smart contract changes require corresponding tests
+3. **Documentation**: Update relevant documentation for new features
+4. **Open Source**: All contributions remain under the project's open-source license
+
+### Getting Involved
+
+- 🐛 **Report Bugs**: Create issues for any bugs or improvement suggestions
+- 💡 **Feature Requests**: Propose new features that align with Network State economics
+- 🔧 **Pull Requests**: Submit improvements following our coding standards
+- 📝 **Documentation**: Help improve setup instructions and technical documentation
+
+**Built with ❤️ for Network States and decentralized communities**
