@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import type { NextPage } from "next";
 import { useAccount } from "wagmi";
@@ -13,7 +14,9 @@ const Home: NextPage = () => {
       <div className="flex items-center flex-col flex-grow pt-10">
         <div className="px-5">
           <h1 className="text-center">
-            <span className="block text-6xl font-bold">🌾 HarvVerse</span>
+            <span className="block mb-4">
+              <Image src="/Harvverse Logo.png" alt="HarvVerse Logo" width={300} height={120} className="mx-auto" />
+            </span>
             <span className="block text-2xl mt-4 mb-2">Farm Investment Platform</span>
             <span className="block text-xl mb-8">
               Empowering agriculture with blockchain-based investment opportunities

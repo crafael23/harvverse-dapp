@@ -1,0 +1,935 @@
+{
+  "address": "0xCB78156636E5A2B9d17f897976CCBd1324c4d53b",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_owner",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "_oracle",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "owner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableInvalidOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "OwnableUnauthorizedAccount",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ReentrancyGuardReentrantCall",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "claimant",
+          "type": "address"
+        }
+      ],
+      "name": "AgreementDefaulted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "investor",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "enum InvestmentAgreement.FulfilmentOption",
+          "name": "option",
+          "type": "uint8"
+        }
+      ],
+      "name": "AgreementFunded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "farmer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "cropNFT",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "cropTokenId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "investAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "investorShareBps",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "expectedQuantity",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "harvestDeadline",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "deliveryOrSaleDeadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgreementProposed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        }
+      ],
+      "name": "AgreementSettled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "oracle",
+          "type": "address"
+        }
+      ],
+      "name": "DeliveryConfirmed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "farmer",
+          "type": "address"
+        }
+      ],
+      "name": "HarvestMarkedReady",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "saleAmount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "investorShare",
+          "type": "uint256"
+        }
+      ],
+      "name": "SaleReported",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "agreementCounter",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "agreements",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "farmer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "investor",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "cropNFT",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "cropTokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "investAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "investorShareBps",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "expectedQuantity",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum InvestmentAgreement.FulfilmentOption",
+          "name": "option",
+          "type": "uint8"
+        },
+        {
+          "internalType": "uint256",
+          "name": "harvestDeadline",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deliveryOrSaleDeadline",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum InvestmentAgreement.AgreementStatus",
+          "name": "status",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimCollateral",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        }
+      ],
+      "name": "confirmDelivery",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "enum InvestmentAgreement.FulfilmentOption",
+          "name": "option",
+          "type": "uint8"
+        }
+      ],
+      "name": "fundAgreement",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAgreement",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "farmer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "investor",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "cropNFT",
+              "type": "address"
+            },
+            {
+              "internalType": "uint256",
+              "name": "cropTokenId",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "investAmount",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "investorShareBps",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "expectedQuantity",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum InvestmentAgreement.FulfilmentOption",
+              "name": "option",
+              "type": "uint8"
+            },
+            {
+              "internalType": "uint256",
+              "name": "harvestDeadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "deliveryOrSaleDeadline",
+              "type": "uint256"
+            },
+            {
+              "internalType": "enum InvestmentAgreement.AgreementStatus",
+              "name": "status",
+              "type": "uint8"
+            }
+          ],
+          "internalType": "struct InvestmentAgreement.Agreement",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        }
+      ],
+      "name": "markHarvestReady",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bytes",
+          "name": "",
+          "type": "bytes"
+        }
+      ],
+      "name": "onERC721Received",
+      "outputs": [
+        {
+          "internalType": "bytes4",
+          "name": "",
+          "type": "bytes4"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "oracle",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "nftContract",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nftTokenId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "investAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "investorShareBps",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "expectedQuantity",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "harvestDeadline",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deliveryOrSaleDeadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "proposeAgreement",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "renounceOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "agreementId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "saleAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "reportSale",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOracle",
+          "type": "address"
+        }
+      ],
+      "name": "setOracle",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x24e3f2961c6c55e9a970dc9f35cf891497d0fbf3aee61f678859efae0f2f6b29",
+  "receipt": {
+    "to": null,
+    "from": "0xB3285b9adFFBf64aA17f54a1e3a71bece93df907",
+    "contractAddress": "0xCB78156636E5A2B9d17f897976CCBd1324c4d53b",
+    "transactionIndex": 14,
+    "gasUsed": "1780165",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000003000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000002040000000000000000000000000020000000000000000800000000000000000000000000000000000000001000000000",
+    "blockHash": "0x740419291d8fc7e477061a8dac2ff3235cd044a99452995e3e925dcb06d1cbb0",
+    "transactionHash": "0x24e3f2961c6c55e9a970dc9f35cf891497d0fbf3aee61f678859efae0f2f6b29",
+    "logs": [
+      {
+        "transactionIndex": 14,
+        "blockNumber": 27607799,
+        "transactionHash": "0x24e3f2961c6c55e9a970dc9f35cf891497d0fbf3aee61f678859efae0f2f6b29",
+        "address": "0xCB78156636E5A2B9d17f897976CCBd1324c4d53b",
+        "topics": [
+          "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
+          "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "0x000000000000000000000000b3285b9adffbf64aa17f54a1e3a71bece93df907"
+        ],
+        "data": "0x",
+        "logIndex": 117,
+        "blockHash": "0x740419291d8fc7e477061a8dac2ff3235cd044a99452995e3e925dcb06d1cbb0"
+      }
+    ],
+    "blockNumber": 27607799,
+    "cumulativeGasUsed": "6705238",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xB3285b9adFFBf64aA17f54a1e3a71bece93df907",
+    "0xB3285b9adFFBf64aA17f54a1e3a71bece93df907"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "59845de1e07bb7340e180e51db9b72ac",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.20+commit.a1b79de6\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_owner\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"_oracle\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"owner\",\"type\":\"address\"}],\"name\":\"OwnableInvalidOwner\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"account\",\"type\":\"address\"}],\"name\":\"OwnableUnauthorizedAccount\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ReentrancyGuardReentrantCall\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"claimant\",\"type\":\"address\"}],\"name\":\"AgreementDefaulted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"enum InvestmentAgreement.FulfilmentOption\",\"name\":\"option\",\"type\":\"uint8\"}],\"name\":\"AgreementFunded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"farmer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"cropNFT\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"cropTokenId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"investAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"investorShareBps\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"expectedQuantity\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"harvestDeadline\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"deliveryOrSaleDeadline\",\"type\":\"uint256\"}],\"name\":\"AgreementProposed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"}],\"name\":\"AgreementSettled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"oracle\",\"type\":\"address\"}],\"name\":\"DeliveryConfirmed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"farmer\",\"type\":\"address\"}],\"name\":\"HarvestMarkedReady\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"previousOwner\",\"type\":\"address\"},{\"indexed\":true,\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"OwnershipTransferred\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"saleAmount\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"investorShare\",\"type\":\"uint256\"}],\"name\":\"SaleReported\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"agreementCounter\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"agreements\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"farmer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"cropNFT\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"cropTokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"investAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"investorShareBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expectedQuantity\",\"type\":\"uint256\"},{\"internalType\":\"enum InvestmentAgreement.FulfilmentOption\",\"name\":\"option\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"harvestDeadline\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deliveryOrSaleDeadline\",\"type\":\"uint256\"},{\"internalType\":\"enum InvestmentAgreement.AgreementStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"}],\"name\":\"claimCollateral\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"}],\"name\":\"confirmDelivery\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"internalType\":\"enum InvestmentAgreement.FulfilmentOption\",\"name\":\"option\",\"type\":\"uint8\"}],\"name\":\"fundAgreement\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"}],\"name\":\"getAgreement\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"farmer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"investor\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"cropNFT\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"cropTokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"investAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"investorShareBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expectedQuantity\",\"type\":\"uint256\"},{\"internalType\":\"enum InvestmentAgreement.FulfilmentOption\",\"name\":\"option\",\"type\":\"uint8\"},{\"internalType\":\"uint256\",\"name\":\"harvestDeadline\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deliveryOrSaleDeadline\",\"type\":\"uint256\"},{\"internalType\":\"enum InvestmentAgreement.AgreementStatus\",\"name\":\"status\",\"type\":\"uint8\"}],\"internalType\":\"struct InvestmentAgreement.Agreement\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"}],\"name\":\"markHarvestReady\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"\",\"type\":\"bytes\"}],\"name\":\"onERC721Received\",\"outputs\":[{\"internalType\":\"bytes4\",\"name\":\"\",\"type\":\"bytes4\"}],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"oracle\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nftContract\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nftTokenId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"investAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"investorShareBps\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"expectedQuantity\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"harvestDeadline\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"deliveryOrSaleDeadline\",\"type\":\"uint256\"}],\"name\":\"proposeAgreement\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"renounceOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"agreementId\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"saleAmount\",\"type\":\"uint256\"}],\"name\":\"reportSale\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOracle\",\"type\":\"address\"}],\"name\":\"setOracle\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"newOwner\",\"type\":\"address\"}],\"name\":\"transferOwnership\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"details\":\"Contract for managing crop investment agreements where farmers tokenize crops and investors can choose between receiving produce or sharing profits\",\"errors\":{\"OwnableInvalidOwner(address)\":[{\"details\":\"The owner is not a valid owner account. (eg. `address(0)`)\"}],\"OwnableUnauthorizedAccount(address)\":[{\"details\":\"The caller account is not authorized to perform an operation.\"}],\"ReentrancyGuardReentrantCall()\":[{\"details\":\"Unauthorized reentrant call.\"}]},\"kind\":\"dev\",\"methods\":{\"claimCollateral(uint256)\":{\"details\":\"Claim collateral when deadlines are missed (called by investor)\",\"params\":{\"agreementId\":\"The ID of the agreement\"}},\"confirmDelivery(uint256)\":{\"details\":\"Confirm delivery (can be called by anyone for conceptual testing)\",\"params\":{\"agreementId\":\"The ID of the agreement\"}},\"fundAgreement(uint256,uint8)\":{\"details\":\"Fund an agreement and choose fulfilment option\",\"params\":{\"agreementId\":\"The ID of the agreement to fund\",\"option\":\"The chosen fulfilment option (DELIVER_PRODUCE or SHARE_PROFITS)\"}},\"getAgreement(uint256)\":{\"details\":\"Get agreement details\",\"params\":{\"agreementId\":\"The ID of the agreement\"},\"returns\":{\"_0\":\"Agreement struct with all details\"}},\"markHarvestReady(uint256)\":{\"details\":\"Mark harvest as ready (called by farmer)\",\"params\":{\"agreementId\":\"The ID of the agreement\"}},\"onERC721Received(address,address,uint256,bytes)\":{\"details\":\"Required for receiving NFTs\"},\"owner()\":{\"details\":\"Returns the address of the current owner.\"},\"proposeAgreement(address,uint256,uint256,uint256,uint256,uint256,uint256)\":{\"details\":\"Propose a new investment agreement\",\"params\":{\"deliveryOrSaleDeadline\":\"Deadline for delivery or sale completion\",\"expectedQuantity\":\"Expected yield in kg (informational)\",\"harvestDeadline\":\"Deadline for marking harvest ready\",\"investAmount\":\"Amount of ETH investment requested\",\"investorShareBps\":\"Basis points (1/10,000) of sale proceeds for investor if SHARE_PROFITS\",\"nftContract\":\"Address of the CropNFT contract\",\"nftTokenId\":\"Token ID of the crop NFT\"},\"returns\":{\"_0\":\"agreementId The ID of the created agreement\"}},\"renounceOwnership()\":{\"details\":\"Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner.\"},\"reportSale(uint256,uint256)\":{\"details\":\"Report sale and distribute proceeds (called by farmer for SHARE_PROFITS option)\",\"params\":{\"agreementId\":\"The ID of the agreement\",\"saleAmount\":\"Total amount received from crop sale\"}},\"setOracle(address)\":{\"details\":\"Update oracle address (only owner)\",\"params\":{\"newOracle\":\"New oracle address\"}},\"transferOwnership(address)\":{\"details\":\"Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner.\"}},\"title\":\"InvestmentAgreement\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/InvestmentAgreement.sol\":\"InvestmentAgreement\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC721/IERC721.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/IERC721.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC165} from \\\"../../utils/introspection/IERC165.sol\\\";\\n\\n/**\\n * @dev Required interface of an ERC721 compliant contract.\\n */\\ninterface IERC721 is IERC165 {\\n    /**\\n     * @dev Emitted when `tokenId` token is transferred from `from` to `to`.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 indexed tokenId);\\n\\n    /**\\n     * @dev Emitted when `owner` enables `approved` to manage the `tokenId` token.\\n     */\\n    event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId);\\n\\n    /**\\n     * @dev Emitted when `owner` enables or disables (`approved`) `operator` to manage all of its assets.\\n     */\\n    event ApprovalForAll(address indexed owner, address indexed operator, bool approved);\\n\\n    /**\\n     * @dev Returns the number of tokens in ``owner``'s account.\\n     */\\n    function balanceOf(address owner) external view returns (uint256 balance);\\n\\n    /**\\n     * @dev Returns the owner of the `tokenId` token.\\n     *\\n     * Requirements:\\n     *\\n     * - `tokenId` must exist.\\n     */\\n    function ownerOf(uint256 tokenId) external view returns (address owner);\\n\\n    /**\\n     * @dev Safely transfers `tokenId` token from `from` to `to`.\\n     *\\n     * Requirements:\\n     *\\n     * - `from` cannot be the zero address.\\n     * - `to` cannot be the zero address.\\n     * - `tokenId` token must exist and be owned by `from`.\\n     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.\\n     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon\\n     *   a safe transfer.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function safeTransferFrom(address from, address to, uint256 tokenId, bytes calldata data) external;\\n\\n    /**\\n     * @dev Safely transfers `tokenId` token from `from` to `to`, checking first that contract recipients\\n     * are aware of the ERC721 protocol to prevent tokens from being forever locked.\\n     *\\n     * Requirements:\\n     *\\n     * - `from` cannot be the zero address.\\n     * - `to` cannot be the zero address.\\n     * - `tokenId` token must exist and be owned by `from`.\\n     * - If the caller is not `from`, it must have been allowed to move this token by either {approve} or\\n     *   {setApprovalForAll}.\\n     * - If `to` refers to a smart contract, it must implement {IERC721Receiver-onERC721Received}, which is called upon\\n     *   a safe transfer.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function safeTransferFrom(address from, address to, uint256 tokenId) external;\\n\\n    /**\\n     * @dev Transfers `tokenId` token from `from` to `to`.\\n     *\\n     * WARNING: Note that the caller is responsible to confirm that the recipient is capable of receiving ERC721\\n     * or else they may be permanently lost. Usage of {safeTransferFrom} prevents loss, though the caller must\\n     * understand this adds an external call which potentially creates a reentrancy vulnerability.\\n     *\\n     * Requirements:\\n     *\\n     * - `from` cannot be the zero address.\\n     * - `to` cannot be the zero address.\\n     * - `tokenId` token must be owned by `from`.\\n     * - If the caller is not `from`, it must be approved to move this token by either {approve} or {setApprovalForAll}.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(address from, address to, uint256 tokenId) external;\\n\\n    /**\\n     * @dev Gives permission to `to` to transfer `tokenId` token to another account.\\n     * The approval is cleared when the token is transferred.\\n     *\\n     * Only a single account can be approved at a time, so approving the zero address clears previous approvals.\\n     *\\n     * Requirements:\\n     *\\n     * - The caller must own the token or be an approved operator.\\n     * - `tokenId` must exist.\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address to, uint256 tokenId) external;\\n\\n    /**\\n     * @dev Approve or remove `operator` as an operator for the caller.\\n     * Operators can call {transferFrom} or {safeTransferFrom} for any token owned by the caller.\\n     *\\n     * Requirements:\\n     *\\n     * - The `operator` cannot be the address zero.\\n     *\\n     * Emits an {ApprovalForAll} event.\\n     */\\n    function setApprovalForAll(address operator, bool approved) external;\\n\\n    /**\\n     * @dev Returns the account approved for `tokenId` token.\\n     *\\n     * Requirements:\\n     *\\n     * - `tokenId` must exist.\\n     */\\n    function getApproved(uint256 tokenId) external view returns (address operator);\\n\\n    /**\\n     * @dev Returns if the `operator` is allowed to manage all of the assets of `owner`.\\n     *\\n     * See {setApprovalForAll}\\n     */\\n    function isApprovedForAll(address owner, address operator) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x5ef46daa3b58ef2702279d514780316efaa952915ee1aa3396f041ee2982b0b4\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC721/IERC721Receiver.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @title ERC721 token receiver interface\\n * @dev Interface for any contract that wants to support safeTransfers\\n * from ERC721 asset contracts.\\n */\\ninterface IERC721Receiver {\\n    /**\\n     * @dev Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom}\\n     * by `operator` from `from`, this function is called.\\n     *\\n     * It must return its Solidity selector to confirm the token transfer.\\n     * If any other value is returned or the interface is not implemented by the recipient, the transfer will be\\n     * reverted.\\n     *\\n     * The selector can be obtained in Solidity with `IERC721Receiver.onERC721Received.selector`.\\n     */\\n    function onERC721Received(\\n        address operator,\\n        address from,\\n        uint256 tokenId,\\n        bytes calldata data\\n    ) external returns (bytes4);\\n}\\n\",\"keccak256\":\"0x7f7a26306c79a65fb8b3b6c757cd74660c532cd8a02e165488e30027dd34ca49\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/ReentrancyGuard.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Contract module that helps prevent reentrant calls to a function.\\n *\\n * Inheriting from `ReentrancyGuard` will make the {nonReentrant} modifier\\n * available, which can be applied to functions to make sure there are no nested\\n * (reentrant) calls to them.\\n *\\n * Note that because there is a single `nonReentrant` guard, functions marked as\\n * `nonReentrant` may not call one another. This can be worked around by making\\n * those functions `private`, and then adding `external` `nonReentrant` entry\\n * points to them.\\n *\\n * TIP: If you would like to learn more about reentrancy and alternative ways\\n * to protect against it, check out our blog post\\n * https://blog.openzeppelin.com/reentrancy-after-istanbul/[Reentrancy After Istanbul].\\n */\\nabstract contract ReentrancyGuard {\\n    // Booleans are more expensive than uint256 or any type that takes up a full\\n    // word because each write operation emits an extra SLOAD to first read the\\n    // slot's contents, replace the bits taken up by the boolean, and then write\\n    // back. This is the compiler's defense against contract upgrades and\\n    // pointer aliasing, and it cannot be disabled.\\n\\n    // The values being non-zero value makes deployment a bit more expensive,\\n    // but in exchange the refund on every call to nonReentrant will be lower in\\n    // amount. Since refunds are capped to a percentage of the total\\n    // transaction's gas, it is best to keep them low in cases like this one, to\\n    // increase the likelihood of the full refund coming into effect.\\n    uint256 private constant NOT_ENTERED = 1;\\n    uint256 private constant ENTERED = 2;\\n\\n    uint256 private _status;\\n\\n    /**\\n     * @dev Unauthorized reentrant call.\\n     */\\n    error ReentrancyGuardReentrantCall();\\n\\n    constructor() {\\n        _status = NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Prevents a contract from calling itself, directly or indirectly.\\n     * Calling a `nonReentrant` function from another `nonReentrant`\\n     * function is not supported. It is possible to prevent this from happening\\n     * by making the `nonReentrant` function external, and making it call a\\n     * `private` function that does the actual work.\\n     */\\n    modifier nonReentrant() {\\n        _nonReentrantBefore();\\n        _;\\n        _nonReentrantAfter();\\n    }\\n\\n    function _nonReentrantBefore() private {\\n        // On the first call to nonReentrant, _status will be NOT_ENTERED\\n        if (_status == ENTERED) {\\n            revert ReentrancyGuardReentrantCall();\\n        }\\n\\n        // Any calls to nonReentrant after this point will fail\\n        _status = ENTERED;\\n    }\\n\\n    function _nonReentrantAfter() private {\\n        // By storing the original value once again, a refund is triggered (see\\n        // https://eips.ethereum.org/EIPS/eip-2200)\\n        _status = NOT_ENTERED;\\n    }\\n\\n    /**\\n     * @dev Returns true if the reentrancy guard is currently set to \\\"entered\\\", which indicates there is a\\n     * `nonReentrant` function in the call stack.\\n     */\\n    function _reentrancyGuardEntered() internal view returns (bool) {\\n        return _status == ENTERED;\\n    }\\n}\\n\",\"keccak256\":\"0xf980daa263b661ab8ddee7d4fd833c7da7e7995e2c359ff1f17e67e4112f2236\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/introspection/IERC165.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (utils/introspection/IERC165.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Interface of the ERC165 standard, as defined in the\\n * https://eips.ethereum.org/EIPS/eip-165[EIP].\\n *\\n * Implementers can declare support of contract interfaces, which can then be\\n * queried by others ({ERC165Checker}).\\n *\\n * For an implementation, see {ERC165}.\\n */\\ninterface IERC165 {\\n    /**\\n     * @dev Returns true if this contract implements the interface defined by\\n     * `interfaceId`. See the corresponding\\n     * https://eips.ethereum.org/EIPS/eip-165#how-interfaces-are-identified[EIP section]\\n     * to learn more about how these ids are created.\\n     *\\n     * This function call must use less than 30 000 gas.\\n     */\\n    function supportsInterface(bytes4 interfaceId) external view returns (bool);\\n}\\n\",\"keccak256\":\"0x4296879f55019b23e135000eb36896057e7101fb7fb859c5ef690cf14643757b\",\"license\":\"MIT\"},\"contracts/InvestmentAgreement.sol\":{\"content\":\"//SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\nimport \\\"@openzeppelin/contracts/token/ERC721/IERC721.sol\\\";\\nimport \\\"@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol\\\";\\nimport \\\"@openzeppelin/contracts/utils/ReentrancyGuard.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\n/**\\n * @title InvestmentAgreement\\n * @dev Contract for managing crop investment agreements where farmers tokenize crops\\n * and investors can choose between receiving produce or sharing profits\\n */\\ncontract InvestmentAgreement is IERC721Receiver, ReentrancyGuard, Ownable {\\n\\n    enum FulfilmentOption { UNSET, DELIVER_PRODUCE, SHARE_PROFITS }\\n    \\n    enum AgreementStatus { Proposed, Funded, ProduceReady, Settled, Defaulted }\\n\\n    struct Agreement {\\n        // Parties\\n        address farmer;\\n        address investor;\\n\\n        // Collateral\\n        address cropNFT;\\n        uint256 cropTokenId;\\n\\n        // Economics\\n        uint256 investAmount;      // ETH supplied by investor (goes to farmer immediately)\\n        uint256 investorShareBps;  // Basis-points (1/10,000) of sale proceeds owed to investor if SHARE_PROFITS\\n        uint256 expectedQuantity;  // Planned yield (kg). Informational / oracle check.\\n\\n        // Logistics\\n        FulfilmentOption option;   // irrevocably chosen by investor right after funding\\n        uint256 harvestDeadline;   // by when farmer must mark produce ready\\n        uint256 deliveryOrSaleDeadline; // by when produce must be delivered or sale proceeds sent\\n\\n        AgreementStatus status;\\n    }\\n\\n    uint256 public agreementCounter;\\n    mapping(uint256 => Agreement) public agreements;\\n\\n    // Oracle/trusted party for delivery confirmation\\n    address public oracle;\\n    \\n    event AgreementProposed(\\n        uint256 indexed agreementId,\\n        address indexed farmer,\\n        address cropNFT,\\n        uint256 cropTokenId,\\n        uint256 investAmount,\\n        uint256 investorShareBps,\\n        uint256 expectedQuantity,\\n        uint256 harvestDeadline,\\n        uint256 deliveryOrSaleDeadline\\n    );\\n    \\n    event AgreementFunded(uint256 indexed agreementId, address indexed investor, FulfilmentOption option);\\n    event HarvestMarkedReady(uint256 indexed agreementId, address indexed farmer);\\n    event DeliveryConfirmed(uint256 indexed agreementId, address indexed oracle);\\n    event SaleReported(uint256 indexed agreementId, uint256 saleAmount, uint256 investorShare);\\n    event AgreementSettled(uint256 indexed agreementId);\\n    event AgreementDefaulted(uint256 indexed agreementId, address indexed claimant);\\n\\n    constructor(address _owner, address _oracle) Ownable(_owner) {\\n        oracle = _oracle;\\n    }\\n\\n    /**\\n     * @dev Propose a new investment agreement\\n     * @param nftContract Address of the CropNFT contract\\n     * @param nftTokenId Token ID of the crop NFT\\n     * @param investAmount Amount of ETH investment requested\\n     * @param investorShareBps Basis points (1/10,000) of sale proceeds for investor if SHARE_PROFITS\\n     * @param expectedQuantity Expected yield in kg (informational)\\n     * @param harvestDeadline Deadline for marking harvest ready\\n     * @param deliveryOrSaleDeadline Deadline for delivery or sale completion\\n     * @return agreementId The ID of the created agreement\\n     */\\n    function proposeAgreement(\\n        address nftContract,\\n        uint256 nftTokenId,\\n        uint256 investAmount,\\n        uint256 investorShareBps,\\n        uint256 expectedQuantity,\\n        uint256 harvestDeadline,\\n        uint256 deliveryOrSaleDeadline\\n    ) external nonReentrant returns (uint256) {\\n        require(investAmount > 0, \\\"InvestmentAgreement: investment amount must be greater than 0\\\");\\n        require(investorShareBps <= 10000, \\\"InvestmentAgreement: investor share cannot exceed 100%\\\");\\n        require(harvestDeadline > block.timestamp, \\\"InvestmentAgreement: harvest deadline must be in future\\\");\\n        require(deliveryOrSaleDeadline > harvestDeadline, \\\"InvestmentAgreement: delivery deadline must be after harvest\\\");\\n        require(nftContract != address(0), \\\"InvestmentAgreement: invalid NFT contract\\\");\\n        \\n        // Transfer NFT from farmer to this contract\\n        IERC721(nftContract).safeTransferFrom(msg.sender, address(this), nftTokenId);\\n        \\n        uint256 agreementId = agreementCounter++;\\n        \\n        agreements[agreementId] = Agreement({\\n            farmer: msg.sender,\\n            investor: address(0),\\n            cropNFT: nftContract,\\n            cropTokenId: nftTokenId,\\n            investAmount: investAmount,\\n            investorShareBps: investorShareBps,\\n            expectedQuantity: expectedQuantity,\\n            option: FulfilmentOption.UNSET,\\n            harvestDeadline: harvestDeadline,\\n            deliveryOrSaleDeadline: deliveryOrSaleDeadline,\\n            status: AgreementStatus.Proposed\\n        });\\n        \\n        emit AgreementProposed(\\n            agreementId,\\n            msg.sender,\\n            nftContract,\\n            nftTokenId,\\n            investAmount,\\n            investorShareBps,\\n            expectedQuantity,\\n            harvestDeadline,\\n            deliveryOrSaleDeadline\\n        );\\n        \\n        return agreementId;\\n    }\\n\\n    /**\\n     * @dev Fund an agreement and choose fulfilment option\\n     * @param agreementId The ID of the agreement to fund\\n     * @param option The chosen fulfilment option (DELIVER_PRODUCE or SHARE_PROFITS)\\n     */\\n    function fundAgreement(uint256 agreementId, FulfilmentOption option) external payable nonReentrant {\\n        Agreement storage agreement = agreements[agreementId];\\n        require(agreement.status == AgreementStatus.Proposed, \\\"InvestmentAgreement: agreement not available for funding\\\");\\n        require(agreement.farmer != address(0), \\\"InvestmentAgreement: agreement does not exist\\\");\\n        require(msg.value == agreement.investAmount, \\\"InvestmentAgreement: incorrect ETH amount\\\");\\n        require(option == FulfilmentOption.DELIVER_PRODUCE || option == FulfilmentOption.SHARE_PROFITS, \\\"InvestmentAgreement: invalid fulfilment option\\\");\\n        \\n        agreement.investor = msg.sender;\\n        agreement.option = option;\\n        agreement.status = AgreementStatus.Funded;\\n        \\n        // Transfer ETH immediately to farmer\\n        (bool success, ) = agreement.farmer.call{value: agreement.investAmount}(\\\"\\\");\\n        require(success, \\\"InvestmentAgreement: ETH transfer to farmer failed\\\");\\n        \\n        emit AgreementFunded(agreementId, msg.sender, option);\\n    }\\n\\n    /**\\n     * @dev Mark harvest as ready (called by farmer)\\n     * @param agreementId The ID of the agreement\\n     */\\n    function markHarvestReady(uint256 agreementId) external nonReentrant {\\n        Agreement storage agreement = agreements[agreementId];\\n        require(agreement.status == AgreementStatus.Funded, \\\"InvestmentAgreement: agreement not funded\\\");\\n        require(agreement.farmer == msg.sender, \\\"InvestmentAgreement: only farmer can mark harvest ready\\\");\\n        require(block.timestamp <= agreement.harvestDeadline, \\\"InvestmentAgreement: harvest deadline passed\\\");\\n        \\n        agreement.status = AgreementStatus.ProduceReady;\\n        \\n        emit HarvestMarkedReady(agreementId, msg.sender);\\n    }\\n\\n    /**\\n     * @dev Confirm delivery (can be called by anyone for conceptual testing)\\n     * @param agreementId The ID of the agreement\\n     */\\n    function confirmDelivery(uint256 agreementId) external nonReentrant {\\n        // Remove oracle restriction for conceptual testing\\n        // require(msg.sender == oracle, \\\"InvestmentAgreement: only oracle can confirm delivery\\\");\\n        \\n        Agreement storage agreement = agreements[agreementId];\\n        require(agreement.status == AgreementStatus.ProduceReady, \\\"InvestmentAgreement: produce not ready\\\");\\n        require(agreement.option == FulfilmentOption.DELIVER_PRODUCE, \\\"InvestmentAgreement: agreement not for delivery\\\");\\n        require(block.timestamp <= agreement.deliveryOrSaleDeadline, \\\"InvestmentAgreement: delivery deadline passed\\\");\\n        \\n        agreement.status = AgreementStatus.Settled;\\n        \\n        // Return NFT to farmer\\n        IERC721(agreement.cropNFT).safeTransferFrom(address(this), agreement.farmer, agreement.cropTokenId);\\n        \\n        emit DeliveryConfirmed(agreementId, msg.sender);\\n        emit AgreementSettled(agreementId);\\n    }\\n\\n    /**\\n     * @dev Report sale and distribute proceeds (called by farmer for SHARE_PROFITS option)\\n     * @param agreementId The ID of the agreement\\n     * @param saleAmount Total amount received from crop sale\\n     */\\n    function reportSale(uint256 agreementId, uint256 saleAmount) external payable nonReentrant {\\n        Agreement storage agreement = agreements[agreementId];\\n        require(agreement.status == AgreementStatus.ProduceReady, \\\"InvestmentAgreement: produce not ready\\\");\\n        require(agreement.farmer == msg.sender, \\\"InvestmentAgreement: only farmer can report sale\\\");\\n        require(agreement.option == FulfilmentOption.SHARE_PROFITS, \\\"InvestmentAgreement: agreement not for profit sharing\\\");\\n        require(block.timestamp <= agreement.deliveryOrSaleDeadline, \\\"InvestmentAgreement: sale deadline passed\\\");\\n        \\n        uint256 investorShare = (saleAmount * agreement.investorShareBps) / 10000;\\n        require(msg.value >= investorShare, \\\"InvestmentAgreement: insufficient ETH for investor share\\\");\\n        \\n        agreement.status = AgreementStatus.Settled;\\n        \\n        // Transfer investor's share\\n        if (investorShare > 0) {\\n            (bool success, ) = agreement.investor.call{value: investorShare}(\\\"\\\");\\n            require(success, \\\"InvestmentAgreement: ETH transfer to investor failed\\\");\\n        }\\n        \\n        // Return excess ETH to farmer if any\\n        uint256 excess = msg.value - investorShare;\\n        if (excess > 0) {\\n            (bool success, ) = agreement.farmer.call{value: excess}(\\\"\\\");\\n            require(success, \\\"InvestmentAgreement: excess ETH return failed\\\");\\n        }\\n        \\n        // Return NFT to farmer\\n        IERC721(agreement.cropNFT).safeTransferFrom(address(this), agreement.farmer, agreement.cropTokenId);\\n        \\n        emit SaleReported(agreementId, saleAmount, investorShare);\\n        emit AgreementSettled(agreementId);\\n    }\\n\\n    /**\\n     * @dev Claim collateral when deadlines are missed (called by investor)\\n     * @param agreementId The ID of the agreement\\n     */\\n    function claimCollateral(uint256 agreementId) external nonReentrant {\\n        Agreement storage agreement = agreements[agreementId];\\n        require(agreement.investor == msg.sender, \\\"InvestmentAgreement: only investor can claim collateral\\\");\\n        require(agreement.status == AgreementStatus.Funded || agreement.status == AgreementStatus.ProduceReady, \\\"InvestmentAgreement: invalid status for claiming\\\");\\n        \\n        bool canClaim = false;\\n        \\n        // Check if harvest deadline passed and still in Funded status\\n        if (agreement.status == AgreementStatus.Funded && block.timestamp > agreement.harvestDeadline) {\\n            canClaim = true;\\n        }\\n        // Check if delivery/sale deadline passed and still in ProduceReady status\\n        else if (agreement.status == AgreementStatus.ProduceReady && block.timestamp > agreement.deliveryOrSaleDeadline) {\\n            canClaim = true;\\n        }\\n        \\n        require(canClaim, \\\"InvestmentAgreement: cannot claim collateral yet\\\");\\n        \\n        agreement.status = AgreementStatus.Defaulted;\\n        \\n        // Transfer NFT to investor\\n        IERC721(agreement.cropNFT).safeTransferFrom(address(this), agreement.investor, agreement.cropTokenId);\\n        \\n        emit AgreementDefaulted(agreementId, msg.sender);\\n    }\\n\\n    /**\\n     * @dev Get agreement details\\n     * @param agreementId The ID of the agreement\\n     * @return Agreement struct with all details\\n     */\\n    function getAgreement(uint256 agreementId) external view returns (Agreement memory) {\\n        return agreements[agreementId];\\n    }\\n\\n    /**\\n     * @dev Update oracle address (only owner)\\n     * @param newOracle New oracle address\\n     */\\n    function setOracle(address newOracle) external onlyOwner {\\n        require(newOracle != address(0), \\\"InvestmentAgreement: invalid oracle address\\\");\\n        oracle = newOracle;\\n    }\\n\\n    /**\\n     * @dev Required for receiving NFTs\\n     */\\n    function onERC721Received(\\n        address,\\n        address,\\n        uint256,\\n        bytes calldata\\n    ) external pure override returns (bytes4) {\\n        return IERC721Receiver.onERC721Received.selector;\\n    }\\n} \",\"keccak256\":\"0x76b5016c9771260f712e80a78941b6b0d17c5662c70bd41499bea2164fda384a\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040523480156200001157600080fd5b5060405162001f3838038062001f3883398101604081905262000034916200010b565b6001600055816001600160a01b0381166200006957604051631e4fbdf760e01b81526000600482015260240160405180910390fd5b62000074816200009c565b50600480546001600160a01b0319166001600160a01b03929092169190911790555062000143565b600180546001600160a01b038381166001600160a01b0319831681179093556040519116919082907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b80516001600160a01b03811681146200010657600080fd5b919050565b600080604083850312156200011f57600080fd5b6200012a83620000ee565b91506200013a60208401620000ee565b90509250929050565b611de580620001536000396000f3fe6080604052600436106100e85760003560e01c80638da5cb5b1161008a578063d1934a0f11610059578063d1934a0f14610308578063e59328a21461031b578063f2fde38b1461033b578063fd84cb971461035b57600080fd5b80638da5cb5b146102175780638f75645414610235578063bd14de9614610248578063c49785b4146102e857600080fd5b8063715018a6116100c6578063715018a6146101885780637422e3f11461019f5780637adbf973146101bf5780637dc0d1d0146101df57600080fd5b806314f79af7146100ed578063150b7a02146101165780634f9f6fe61461015b575b600080fd5b3480156100f957600080fd5b5061010360025481565b6040519081526020015b60405180910390f35b34801561012257600080fd5b506101426101313660046119b3565b630a85bd0160e11b95945050505050565b6040516001600160e01b0319909116815260200161010d565b34801561016757600080fd5b5061017b610176366004611a4e565b61037b565b60405161010d9190611aa1565b34801561019457600080fd5b5061019d6104c6565b005b3480156101ab57600080fd5b5061019d6101ba366004611a4e565b6104da565b3480156101cb57600080fd5b5061019d6101da366004611b55565b61068f565b3480156101eb57600080fd5b506004546101ff906001600160a01b031681565b6040516001600160a01b03909116815260200161010d565b34801561022357600080fd5b506001546001600160a01b03166101ff565b61019d610243366004611b77565b610723565b34801561025457600080fd5b506102d1610263366004611a4e565b600360208190526000918252604090912080546001820154600283015493830154600484015460058501546006860154600787015460088801546009890154600a909901546001600160a01b039889169a978916999790981697959694959394929360ff928316939192168b565b60405161010d9b9a99989796959493929190611bab565b3480156102f457600080fd5b5061019d610303366004611a4e565b610a77565b61019d610316366004611c21565b610d43565b34801561032757600080fd5b50610103610336366004611c43565b6111fe565b34801561034757600080fd5b5061019d610356366004611b55565b6116a8565b34801561036757600080fd5b5061019d610376366004611a4e565b6116e3565b6103d86040805161016081018252600080825260208201819052918101829052606081018290526080810182905260a0810182905260c0810182905260e08101829052610100810182905261012081018290529061014082015290565b60008281526003602081815260409283902083516101608101855281546001600160a01b03908116825260018301548116938201939093526002808301549093169481019490945291820154606084015260048201546080840152600582015460a0840152600682015460c0840152600782015460e084019160ff9091169081111561046657610466611a67565b600281111561047757610477611a67565b81526008820154602082015260098201546040820152600a82015460609091019060ff1660048111156104ac576104ac611a67565b60048111156104bd576104bd611a67565b90525092915050565b6104ce6118ee565b6104d8600061191b565b565b6104e261196d565b60008181526003602052604090206001600a82015460ff16600481111561050b5761050b611a67565b1461055d5760405162461bcd60e51b81526020600482015260296024820152600080516020611d908339815191526044820152681bdd08199d5b99195960ba1b60648201526084015b60405180910390fd5b80546001600160a01b031633146105dc5760405162461bcd60e51b815260206004820152603760248201527f496e766573746d656e7441677265656d656e743a206f6e6c79206661726d657260448201527f2063616e206d61726b20686172766573742072656164790000000000000000006064820152608401610554565b80600801544211156106455760405162461bcd60e51b815260206004820152602c60248201527f496e766573746d656e7441677265656d656e743a20686172766573742064656160448201526b191b1a5b99481c185cdcd95960a21b6064820152608401610554565b600a8101805460ff19166002179055604051339083907fd454f308d46f3cce98978f6f218eed9b84999177e8747fa5c00dd4c1b848389790600090a35061068c6001600055565b50565b6106976118ee565b6001600160a01b0381166107015760405162461bcd60e51b815260206004820152602b60248201527f496e766573746d656e7441677265656d656e743a20696e76616c6964206f726160448201526a636c65206164647265737360a81b6064820152608401610554565b600480546001600160a01b0319166001600160a01b0392909216919091179055565b61072b61196d565b600082815260036020526040812090600a82015460ff16600481111561075357610753611a67565b146107b45760405162461bcd60e51b81526020600482015260386024820152600080516020611d9083398151915260448201527f6f7420617661696c61626c6520666f722066756e64696e6700000000000000006064820152608401610554565b80546001600160a01b03166108215760405162461bcd60e51b815260206004820152602d60248201527f496e766573746d656e7441677265656d656e743a2061677265656d656e74206460448201526c1bd95cc81b9bdd08195e1a5cdd609a1b6064820152608401610554565b806004015434146108865760405162461bcd60e51b815260206004820152602960248201527f496e766573746d656e7441677265656d656e743a20696e636f72726563742045604482015268151208185b5bdd5b9d60ba1b6064820152608401610554565b600182600281111561089a5761089a611a67565b14806108b7575060028260028111156108b5576108b5611a67565b145b61091a5760405162461bcd60e51b815260206004820152602e60248201527f496e766573746d656e7441677265656d656e743a20696e76616c69642066756c60448201526d3334b636b2b73a1037b83a34b7b760911b6064820152608401610554565b600180820180546001600160a01b03191633179055600782018054849260ff199091169083600281111561095057610950611a67565b0217905550600a8101805460ff19166001179055805460048201546040516000926001600160a01b031691908381818185875af1925050503d80600081146109b4576040519150601f19603f3d011682016040523d82523d6000602084013e6109b9565b606091505b5050905080610a255760405162461bcd60e51b815260206004820152603260248201527f496e766573746d656e7441677265656d656e743a20455448207472616e7366656044820152711c881d1bc819985c9b595c8819985a5b195960721b6064820152608401610554565b336001600160a01b0316847f905cd225b549721bb2c4804883387d529fd56d25d44289c169c98873ba56382685604051610a5f9190611c96565b60405180910390a35050610a736001600055565b5050565b610a7f61196d565b600081815260036020526040902060018101546001600160a01b03163314610b0f5760405162461bcd60e51b815260206004820152603760248201527f496e766573746d656e7441677265656d656e743a206f6e6c7920696e7665737460448201527f6f722063616e20636c61696d20636f6c6c61746572616c0000000000000000006064820152608401610554565b6001600a82015460ff166004811115610b2a57610b2a611a67565b1480610b4e57506002600a82015460ff166004811115610b4c57610b4c611a67565b145b610bb35760405162461bcd60e51b815260206004820152603060248201527f496e766573746d656e7441677265656d656e743a20696e76616c69642073746160448201526f74757320666f7220636c61696d696e6760801b6064820152608401610554565b60006001600a83015460ff166004811115610bd057610bd0611a67565b148015610be05750816008015442115b15610bed57506001610c21565b6002600a83015460ff166004811115610c0857610c08611a67565b148015610c185750816009015442115b15610c21575060015b80610c875760405162461bcd60e51b815260206004820152603060248201527f496e766573746d656e7441677265656d656e743a2063616e6e6f7420636c616960448201526f1b4818dbdb1b185d195c985b081e595d60821b6064820152608401610554565b600a8201805460ff19166004908117909155600283015460018401546003850154604051632142170760e11b81526001600160a01b03938416946342842e0e94610cd8943094911692909101611caa565b600060405180830381600087803b158015610cf257600080fd5b505af1158015610d06573d6000803e3d6000fd5b50506040513392508591507f8961d78bb072851287373498c9125ec7ef87f402bc68da4e0629bb6ea748210290600090a3505061068c6001600055565b610d4b61196d565b60008281526003602052604090206002600a82015460ff166004811115610d7457610d74611a67565b14610d915760405162461bcd60e51b815260040161055490611cce565b80546001600160a01b03163314610e035760405162461bcd60e51b815260206004820152603060248201527f496e766573746d656e7441677265656d656e743a206f6e6c79206661726d657260448201526f2063616e207265706f72742073616c6560801b6064820152608401610554565b6002600782015460ff166002811115610e1e57610e1e611a67565b14610e775760405162461bcd60e51b81526020600482015260356024820152600080516020611d908339815191526044820152746f7420666f722070726f6669742073686172696e6760581b6064820152608401610554565b8060090154421115610edd5760405162461bcd60e51b815260206004820152602960248201527f496e766573746d656e7441677265656d656e743a2073616c6520646561646c696044820152681b99481c185cdcd95960ba1b6064820152608401610554565b6000612710826005015484610ef29190611d2a565b610efc9190611d41565b905080341015610f745760405162461bcd60e51b815260206004820152603860248201527f496e766573746d656e7441677265656d656e743a20696e73756666696369656e60448201527f742045544820666f7220696e766573746f7220736861726500000000000000006064820152608401610554565b600a8201805460ff19166003179055801561104d5760018201546040516000916001600160a01b03169083908381818185875af1925050503d8060008114610fd8576040519150601f19603f3d011682016040523d82523d6000602084013e610fdd565b606091505b505090508061104b5760405162461bcd60e51b815260206004820152603460248201527f496e766573746d656e7441677265656d656e743a20455448207472616e7366656044820152731c881d1bc81a5b9d995cdd1bdc8819985a5b195960621b6064820152608401610554565b505b60006110598234611d63565b9050801561111b5782546040516000916001600160a01b03169083908381818185875af1925050503d80600081146110ad576040519150601f19603f3d011682016040523d82523d6000602084013e6110b2565b606091505b50509050806111195760405162461bcd60e51b815260206004820152602d60248201527f496e766573746d656e7441677265656d656e743a20657863657373204554482060448201526c1c995d1d5c9b8819985a5b1959609a1b6064820152608401610554565b505b600283015483546003850154604051632142170760e11b81526001600160a01b03938416936342842e0e936111599330939290911691600401611caa565b600060405180830381600087803b15801561117357600080fd5b505af1158015611187573d6000803e3d6000fd5b505060408051878152602081018690528893507f8953d569da6657c91a4a77b85ecab67e245da91388ac364471f6030954ab217092500160405180910390a260405185907fbe80b075bd2524bc3cdae65d2e445f0a03cac0aa1ec8014b83cfbc0d7faf2f6990600090a2505050610a736001600055565b600061120861196d565b6000861161127e5760405162461bcd60e51b815260206004820152603d60248201527f496e766573746d656e7441677265656d656e743a20696e766573746d656e742060448201527f616d6f756e74206d7573742062652067726561746572207468616e20300000006064820152608401610554565b6127108511156112ef5760405162461bcd60e51b815260206004820152603660248201527f496e766573746d656e7441677265656d656e743a20696e766573746f722073686044820152756172652063616e6e6f7420657863656564203130302560501b6064820152608401610554565b4283116113645760405162461bcd60e51b815260206004820152603760248201527f496e766573746d656e7441677265656d656e743a20686172766573742064656160448201527f646c696e65206d75737420626520696e206675747572650000000000000000006064820152608401610554565b8282116113d95760405162461bcd60e51b815260206004820152603c60248201527f496e766573746d656e7441677265656d656e743a2064656c697665727920646560448201527f61646c696e65206d7573742062652061667465722068617276657374000000006064820152608401610554565b6001600160a01b0388166114415760405162461bcd60e51b815260206004820152602960248201527f496e766573746d656e7441677265656d656e743a20696e76616c6964204e46546044820152680818dbdb9d1c9858dd60ba1b6064820152608401610554565b604051632142170760e11b81526001600160a01b038916906342842e0e9061147190339030908c90600401611caa565b600060405180830381600087803b15801561148b57600080fd5b505af115801561149f573d6000803e3d6000fd5b505060028054600093509150826114b583611d76565b919050559050604051806101600160405280336001600160a01b0316815260200160006001600160a01b031681526020018a6001600160a01b031681526020018981526020018881526020018781526020018681526020016000600281111561152057611520611a67565b81526020808201879052604080830187905260006060938401819052858152600380845290829020855181546001600160a01b03199081166001600160a01b0392831617835594870151600180840180548816928416929092179091559387015160028084018054909716919092161790945593850151908401556080840151600484015560a0840151600584015560c0840151600684015560e08401516007840180549193909260ff19909216919084908111156115e1576115e1611a67565b021790555061010082015160088201556101208201516009820155610140820151600a8201805460ff1916600183600481111561162057611620611a67565b021790555050604080516001600160a01b038c168152602081018b9052908101899052606081018890526080810187905260a0810186905260c0810185905233915082907f749dd64e741026216d174b70abfbda3842ec2ccf595a3cd1565b67b101bddcda9060e00160405180910390a3905061169d6001600055565b979650505050505050565b6116b06118ee565b6001600160a01b0381166116da57604051631e4fbdf760e01b815260006004820152602401610554565b61068c8161191b565b6116eb61196d565b60008181526003602052604090206002600a82015460ff16600481111561171457611714611a67565b146117315760405162461bcd60e51b815260040161055490611cce565b6001600782015460ff16600281111561174c5761174c611a67565b1461179f5760405162461bcd60e51b815260206004820152602f6024820152600080516020611d9083398151915260448201526e6f7420666f722064656c697665727960881b6064820152608401610554565b80600901544211156118095760405162461bcd60e51b815260206004820152602d60248201527f496e766573746d656e7441677265656d656e743a2064656c697665727920646560448201526c18591b1a5b99481c185cdcd959609a1b6064820152608401610554565b600a8101805460ff191660039081179091556002820154825491830154604051632142170760e11b81526001600160a01b03928316936342842e0e93611859933093919092169190600401611caa565b600060405180830381600087803b15801561187357600080fd5b505af1158015611887573d6000803e3d6000fd5b50506040513392508491507f64a783c6150854ae756454311c7625a965c757996ba8cc1a8c6205380f33725090600090a360405182907fbe80b075bd2524bc3cdae65d2e445f0a03cac0aa1ec8014b83cfbc0d7faf2f6990600090a25061068c6001600055565b6001546001600160a01b031633146104d85760405163118cdaa760e01b8152336004820152602401610554565b600180546001600160a01b038381166001600160a01b0319831681179093556040519116919082907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b60026000540361199057604051633ee5aeb560e01b815260040160405180910390fd5b6002600055565b80356001600160a01b03811681146119ae57600080fd5b919050565b6000806000806000608086880312156119cb57600080fd5b6119d486611997565b94506119e260208701611997565b935060408601359250606086013567ffffffffffffffff80821115611a0657600080fd5b818801915088601f830112611a1a57600080fd5b813581811115611a2957600080fd5b896020828501011115611a3b57600080fd5b9699959850939650602001949392505050565b600060208284031215611a6057600080fd5b5035919050565b634e487b7160e01b600052602160045260246000fd5b60038110611a8d57611a8d611a67565b9052565b60058110611a8d57611a8d611a67565b81516001600160a01b0316815261016081016020830151611acd60208401826001600160a01b03169052565b506040830151611ae860408401826001600160a01b03169052565b50606083015160608301526080830151608083015260a083015160a083015260c083015160c083015260e0830151611b2360e0840182611a7d565b506101008381015190830152610120808401519083015261014080840151611b4d82850182611a91565b505092915050565b600060208284031215611b6757600080fd5b611b7082611997565b9392505050565b60008060408385031215611b8a57600080fd5b82359150602083013560038110611ba057600080fd5b809150509250929050565b6001600160a01b038c811682528b811660208301528a166040820152606081018990526080810188905260a0810187905260c081018690526101608101611bf560e0830187611a7d565b8461010083015283610120830152611c11610140830184611a91565b9c9b505050505050505050505050565b60008060408385031215611c3457600080fd5b50508035926020909101359150565b600080600080600080600060e0888a031215611c5e57600080fd5b611c6788611997565b9960208901359950604089013598606081013598506080810135975060a0810135965060c00135945092505050565b60208101611ca48284611a7d565b92915050565b6001600160a01b039384168152919092166020820152604081019190915260600190565b60208082526026908201527f496e766573746d656e7441677265656d656e743a2070726f64756365206e6f7460408201526520726561647960d01b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b8082028115828204841417611ca457611ca4611d14565b600082611d5e57634e487b7160e01b600052601260045260246000fd5b500490565b81810381811115611ca457611ca4611d14565b600060018201611d8857611d88611d14565b506001019056fe496e766573746d656e7441677265656d656e743a2061677265656d656e74206ea26469706673582212202b634604405b3802ffc61bb75e90966dde4f023cc4c8989a1f113566f1dfcd7c64736f6c63430008140033",
+  "deployedBytecode": "0x6080604052600436106100e85760003560e01c80638da5cb5b1161008a578063d1934a0f11610059578063d1934a0f14610308578063e59328a21461031b578063f2fde38b1461033b578063fd84cb971461035b57600080fd5b80638da5cb5b146102175780638f75645414610235578063bd14de9614610248578063c49785b4146102e857600080fd5b8063715018a6116100c6578063715018a6146101885780637422e3f11461019f5780637adbf973146101bf5780637dc0d1d0146101df57600080fd5b806314f79af7146100ed578063150b7a02146101165780634f9f6fe61461015b575b600080fd5b3480156100f957600080fd5b5061010360025481565b6040519081526020015b60405180910390f35b34801561012257600080fd5b506101426101313660046119b3565b630a85bd0160e11b95945050505050565b6040516001600160e01b0319909116815260200161010d565b34801561016757600080fd5b5061017b610176366004611a4e565b61037b565b60405161010d9190611aa1565b34801561019457600080fd5b5061019d6104c6565b005b3480156101ab57600080fd5b5061019d6101ba366004611a4e565b6104da565b3480156101cb57600080fd5b5061019d6101da366004611b55565b61068f565b3480156101eb57600080fd5b506004546101ff906001600160a01b031681565b6040516001600160a01b03909116815260200161010d565b34801561022357600080fd5b506001546001600160a01b03166101ff565b61019d610243366004611b77565b610723565b34801561025457600080fd5b506102d1610263366004611a4e565b600360208190526000918252604090912080546001820154600283015493830154600484015460058501546006860154600787015460088801546009890154600a909901546001600160a01b039889169a978916999790981697959694959394929360ff928316939192168b565b60405161010d9b9a99989796959493929190611bab565b3480156102f457600080fd5b5061019d610303366004611a4e565b610a77565b61019d610316366004611c21565b610d43565b34801561032757600080fd5b50610103610336366004611c43565b6111fe565b34801561034757600080fd5b5061019d610356366004611b55565b6116a8565b34801561036757600080fd5b5061019d610376366004611a4e565b6116e3565b6103d86040805161016081018252600080825260208201819052918101829052606081018290526080810182905260a0810182905260c0810182905260e08101829052610100810182905261012081018290529061014082015290565b60008281526003602081815260409283902083516101608101855281546001600160a01b03908116825260018301548116938201939093526002808301549093169481019490945291820154606084015260048201546080840152600582015460a0840152600682015460c0840152600782015460e084019160ff9091169081111561046657610466611a67565b600281111561047757610477611a67565b81526008820154602082015260098201546040820152600a82015460609091019060ff1660048111156104ac576104ac611a67565b60048111156104bd576104bd611a67565b90525092915050565b6104ce6118ee565b6104d8600061191b565b565b6104e261196d565b60008181526003602052604090206001600a82015460ff16600481111561050b5761050b611a67565b1461055d5760405162461bcd60e51b81526020600482015260296024820152600080516020611d908339815191526044820152681bdd08199d5b99195960ba1b60648201526084015b60405180910390fd5b80546001600160a01b031633146105dc5760405162461bcd60e51b815260206004820152603760248201527f496e766573746d656e7441677265656d656e743a206f6e6c79206661726d657260448201527f2063616e206d61726b20686172766573742072656164790000000000000000006064820152608401610554565b80600801544211156106455760405162461bcd60e51b815260206004820152602c60248201527f496e766573746d656e7441677265656d656e743a20686172766573742064656160448201526b191b1a5b99481c185cdcd95960a21b6064820152608401610554565b600a8101805460ff19166002179055604051339083907fd454f308d46f3cce98978f6f218eed9b84999177e8747fa5c00dd4c1b848389790600090a35061068c6001600055565b50565b6106976118ee565b6001600160a01b0381166107015760405162461bcd60e51b815260206004820152602b60248201527f496e766573746d656e7441677265656d656e743a20696e76616c6964206f726160448201526a636c65206164647265737360a81b6064820152608401610554565b600480546001600160a01b0319166001600160a01b0392909216919091179055565b61072b61196d565b600082815260036020526040812090600a82015460ff16600481111561075357610753611a67565b146107b45760405162461bcd60e51b81526020600482015260386024820152600080516020611d9083398151915260448201527f6f7420617661696c61626c6520666f722066756e64696e6700000000000000006064820152608401610554565b80546001600160a01b03166108215760405162461bcd60e51b815260206004820152602d60248201527f496e766573746d656e7441677265656d656e743a2061677265656d656e74206460448201526c1bd95cc81b9bdd08195e1a5cdd609a1b6064820152608401610554565b806004015434146108865760405162461bcd60e51b815260206004820152602960248201527f496e766573746d656e7441677265656d656e743a20696e636f72726563742045604482015268151208185b5bdd5b9d60ba1b6064820152608401610554565b600182600281111561089a5761089a611a67565b14806108b7575060028260028111156108b5576108b5611a67565b145b61091a5760405162461bcd60e51b815260206004820152602e60248201527f496e766573746d656e7441677265656d656e743a20696e76616c69642066756c60448201526d3334b636b2b73a1037b83a34b7b760911b6064820152608401610554565b600180820180546001600160a01b03191633179055600782018054849260ff199091169083600281111561095057610950611a67565b0217905550600a8101805460ff19166001179055805460048201546040516000926001600160a01b031691908381818185875af1925050503d80600081146109b4576040519150601f19603f3d011682016040523d82523d6000602084013e6109b9565b606091505b5050905080610a255760405162461bcd60e51b815260206004820152603260248201527f496e766573746d656e7441677265656d656e743a20455448207472616e7366656044820152711c881d1bc819985c9b595c8819985a5b195960721b6064820152608401610554565b336001600160a01b0316847f905cd225b549721bb2c4804883387d529fd56d25d44289c169c98873ba56382685604051610a5f9190611c96565b60405180910390a35050610a736001600055565b5050565b610a7f61196d565b600081815260036020526040902060018101546001600160a01b03163314610b0f5760405162461bcd60e51b815260206004820152603760248201527f496e766573746d656e7441677265656d656e743a206f6e6c7920696e7665737460448201527f6f722063616e20636c61696d20636f6c6c61746572616c0000000000000000006064820152608401610554565b6001600a82015460ff166004811115610b2a57610b2a611a67565b1480610b4e57506002600a82015460ff166004811115610b4c57610b4c611a67565b145b610bb35760405162461bcd60e51b815260206004820152603060248201527f496e766573746d656e7441677265656d656e743a20696e76616c69642073746160448201526f74757320666f7220636c61696d696e6760801b6064820152608401610554565b60006001600a83015460ff166004811115610bd057610bd0611a67565b148015610be05750816008015442115b15610bed57506001610c21565b6002600a83015460ff166004811115610c0857610c08611a67565b148015610c185750816009015442115b15610c21575060015b80610c875760405162461bcd60e51b815260206004820152603060248201527f496e766573746d656e7441677265656d656e743a2063616e6e6f7420636c616960448201526f1b4818dbdb1b185d195c985b081e595d60821b6064820152608401610554565b600a8201805460ff19166004908117909155600283015460018401546003850154604051632142170760e11b81526001600160a01b03938416946342842e0e94610cd8943094911692909101611caa565b600060405180830381600087803b158015610cf257600080fd5b505af1158015610d06573d6000803e3d6000fd5b50506040513392508591507f8961d78bb072851287373498c9125ec7ef87f402bc68da4e0629bb6ea748210290600090a3505061068c6001600055565b610d4b61196d565b60008281526003602052604090206002600a82015460ff166004811115610d7457610d74611a67565b14610d915760405162461bcd60e51b815260040161055490611cce565b80546001600160a01b03163314610e035760405162461bcd60e51b815260206004820152603060248201527f496e766573746d656e7441677265656d656e743a206f6e6c79206661726d657260448201526f2063616e207265706f72742073616c6560801b6064820152608401610554565b6002600782015460ff166002811115610e1e57610e1e611a67565b14610e775760405162461bcd60e51b81526020600482015260356024820152600080516020611d908339815191526044820152746f7420666f722070726f6669742073686172696e6760581b6064820152608401610554565b8060090154421115610edd5760405162461bcd60e51b815260206004820152602960248201527f496e766573746d656e7441677265656d656e743a2073616c6520646561646c696044820152681b99481c185cdcd95960ba1b6064820152608401610554565b6000612710826005015484610ef29190611d2a565b610efc9190611d41565b905080341015610f745760405162461bcd60e51b815260206004820152603860248201527f496e766573746d656e7441677265656d656e743a20696e73756666696369656e60448201527f742045544820666f7220696e766573746f7220736861726500000000000000006064820152608401610554565b600a8201805460ff19166003179055801561104d5760018201546040516000916001600160a01b03169083908381818185875af1925050503d8060008114610fd8576040519150601f19603f3d011682016040523d82523d6000602084013e610fdd565b606091505b505090508061104b5760405162461bcd60e51b815260206004820152603460248201527f496e766573746d656e7441677265656d656e743a20455448207472616e7366656044820152731c881d1bc81a5b9d995cdd1bdc8819985a5b195960621b6064820152608401610554565b505b60006110598234611d63565b9050801561111b5782546040516000916001600160a01b03169083908381818185875af1925050503d80600081146110ad576040519150601f19603f3d011682016040523d82523d6000602084013e6110b2565b606091505b50509050806111195760405162461bcd60e51b815260206004820152602d60248201527f496e766573746d656e7441677265656d656e743a20657863657373204554482060448201526c1c995d1d5c9b8819985a5b1959609a1b6064820152608401610554565b505b600283015483546003850154604051632142170760e11b81526001600160a01b03938416936342842e0e936111599330939290911691600401611caa565b600060405180830381600087803b15801561117357600080fd5b505af1158015611187573d6000803e3d6000fd5b505060408051878152602081018690528893507f8953d569da6657c91a4a77b85ecab67e245da91388ac364471f6030954ab217092500160405180910390a260405185907fbe80b075bd2524bc3cdae65d2e445f0a03cac0aa1ec8014b83cfbc0d7faf2f6990600090a2505050610a736001600055565b600061120861196d565b6000861161127e5760405162461bcd60e51b815260206004820152603d60248201527f496e766573746d656e7441677265656d656e743a20696e766573746d656e742060448201527f616d6f756e74206d7573742062652067726561746572207468616e20300000006064820152608401610554565b6127108511156112ef5760405162461bcd60e51b815260206004820152603660248201527f496e766573746d656e7441677265656d656e743a20696e766573746f722073686044820152756172652063616e6e6f7420657863656564203130302560501b6064820152608401610554565b4283116113645760405162461bcd60e51b815260206004820152603760248201527f496e766573746d656e7441677265656d656e743a20686172766573742064656160448201527f646c696e65206d75737420626520696e206675747572650000000000000000006064820152608401610554565b8282116113d95760405162461bcd60e51b815260206004820152603c60248201527f496e766573746d656e7441677265656d656e743a2064656c697665727920646560448201527f61646c696e65206d7573742062652061667465722068617276657374000000006064820152608401610554565b6001600160a01b0388166114415760405162461bcd60e51b815260206004820152602960248201527f496e766573746d656e7441677265656d656e743a20696e76616c6964204e46546044820152680818dbdb9d1c9858dd60ba1b6064820152608401610554565b604051632142170760e11b81526001600160a01b038916906342842e0e9061147190339030908c90600401611caa565b600060405180830381600087803b15801561148b57600080fd5b505af115801561149f573d6000803e3d6000fd5b505060028054600093509150826114b583611d76565b919050559050604051806101600160405280336001600160a01b0316815260200160006001600160a01b031681526020018a6001600160a01b031681526020018981526020018881526020018781526020018681526020016000600281111561152057611520611a67565b81526020808201879052604080830187905260006060938401819052858152600380845290829020855181546001600160a01b03199081166001600160a01b0392831617835594870151600180840180548816928416929092179091559387015160028084018054909716919092161790945593850151908401556080840151600484015560a0840151600584015560c0840151600684015560e08401516007840180549193909260ff19909216919084908111156115e1576115e1611a67565b021790555061010082015160088201556101208201516009820155610140820151600a8201805460ff1916600183600481111561162057611620611a67565b021790555050604080516001600160a01b038c168152602081018b9052908101899052606081018890526080810187905260a0810186905260c0810185905233915082907f749dd64e741026216d174b70abfbda3842ec2ccf595a3cd1565b67b101bddcda9060e00160405180910390a3905061169d6001600055565b979650505050505050565b6116b06118ee565b6001600160a01b0381166116da57604051631e4fbdf760e01b815260006004820152602401610554565b61068c8161191b565b6116eb61196d565b60008181526003602052604090206002600a82015460ff16600481111561171457611714611a67565b146117315760405162461bcd60e51b815260040161055490611cce565b6001600782015460ff16600281111561174c5761174c611a67565b1461179f5760405162461bcd60e51b815260206004820152602f6024820152600080516020611d9083398151915260448201526e6f7420666f722064656c697665727960881b6064820152608401610554565b80600901544211156118095760405162461bcd60e51b815260206004820152602d60248201527f496e766573746d656e7441677265656d656e743a2064656c697665727920646560448201526c18591b1a5b99481c185cdcd959609a1b6064820152608401610554565b600a8101805460ff191660039081179091556002820154825491830154604051632142170760e11b81526001600160a01b03928316936342842e0e93611859933093919092169190600401611caa565b600060405180830381600087803b15801561187357600080fd5b505af1158015611887573d6000803e3d6000fd5b50506040513392508491507f64a783c6150854ae756454311c7625a965c757996ba8cc1a8c6205380f33725090600090a360405182907fbe80b075bd2524bc3cdae65d2e445f0a03cac0aa1ec8014b83cfbc0d7faf2f6990600090a25061068c6001600055565b6001546001600160a01b031633146104d85760405163118cdaa760e01b8152336004820152602401610554565b600180546001600160a01b038381166001600160a01b0319831681179093556040519116919082907f8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e090600090a35050565b60026000540361199057604051633ee5aeb560e01b815260040160405180910390fd5b6002600055565b80356001600160a01b03811681146119ae57600080fd5b919050565b6000806000806000608086880312156119cb57600080fd5b6119d486611997565b94506119e260208701611997565b935060408601359250606086013567ffffffffffffffff80821115611a0657600080fd5b818801915088601f830112611a1a57600080fd5b813581811115611a2957600080fd5b896020828501011115611a3b57600080fd5b9699959850939650602001949392505050565b600060208284031215611a6057600080fd5b5035919050565b634e487b7160e01b600052602160045260246000fd5b60038110611a8d57611a8d611a67565b9052565b60058110611a8d57611a8d611a67565b81516001600160a01b0316815261016081016020830151611acd60208401826001600160a01b03169052565b506040830151611ae860408401826001600160a01b03169052565b50606083015160608301526080830151608083015260a083015160a083015260c083015160c083015260e0830151611b2360e0840182611a7d565b506101008381015190830152610120808401519083015261014080840151611b4d82850182611a91565b505092915050565b600060208284031215611b6757600080fd5b611b7082611997565b9392505050565b60008060408385031215611b8a57600080fd5b82359150602083013560038110611ba057600080fd5b809150509250929050565b6001600160a01b038c811682528b811660208301528a166040820152606081018990526080810188905260a0810187905260c081018690526101608101611bf560e0830187611a7d565b8461010083015283610120830152611c11610140830184611a91565b9c9b505050505050505050505050565b60008060408385031215611c3457600080fd5b50508035926020909101359150565b600080600080600080600060e0888a031215611c5e57600080fd5b611c6788611997565b9960208901359950604089013598606081013598506080810135975060a0810135965060c00135945092505050565b60208101611ca48284611a7d565b92915050565b6001600160a01b039384168152919092166020820152604081019190915260600190565b60208082526026908201527f496e766573746d656e7441677265656d656e743a2070726f64756365206e6f7460408201526520726561647960d01b606082015260800190565b634e487b7160e01b600052601160045260246000fd5b8082028115828204841417611ca457611ca4611d14565b600082611d5e57634e487b7160e01b600052601260045260246000fd5b500490565b81810381811115611ca457611ca4611d14565b600060018201611d8857611d88611d14565b506001019056fe496e766573746d656e7441677265656d656e743a2061677265656d656e74206ea26469706673582212202b634604405b3802ffc61bb75e90966dde4f023cc4c8989a1f113566f1dfcd7c64736f6c63430008140033",
+  "devdoc": {
+    "details": "Contract for managing crop investment agreements where farmers tokenize crops and investors can choose between receiving produce or sharing profits",
+    "errors": {
+      "OwnableInvalidOwner(address)": [
+        {
+          "details": "The owner is not a valid owner account. (eg. `address(0)`)"
+        }
+      ],
+      "OwnableUnauthorizedAccount(address)": [
+        {
+          "details": "The caller account is not authorized to perform an operation."
+        }
+      ],
+      "ReentrancyGuardReentrantCall()": [
+        {
+          "details": "Unauthorized reentrant call."
+        }
+      ]
+    },
+    "kind": "dev",
+    "methods": {
+      "claimCollateral(uint256)": {
+        "details": "Claim collateral when deadlines are missed (called by investor)",
+        "params": {
+          "agreementId": "The ID of the agreement"
+        }
+      },
+      "confirmDelivery(uint256)": {
+        "details": "Confirm delivery (can be called by anyone for conceptual testing)",
+        "params": {
+          "agreementId": "The ID of the agreement"
+        }
+      },
+      "fundAgreement(uint256,uint8)": {
+        "details": "Fund an agreement and choose fulfilment option",
+        "params": {
+          "agreementId": "The ID of the agreement to fund",
+          "option": "The chosen fulfilment option (DELIVER_PRODUCE or SHARE_PROFITS)"
+        }
+      },
+      "getAgreement(uint256)": {
+        "details": "Get agreement details",
+        "params": {
+          "agreementId": "The ID of the agreement"
+        },
+        "returns": {
+          "_0": "Agreement struct with all details"
+        }
+      },
+      "markHarvestReady(uint256)": {
+        "details": "Mark harvest as ready (called by farmer)",
+        "params": {
+          "agreementId": "The ID of the agreement"
+        }
+      },
+      "onERC721Received(address,address,uint256,bytes)": {
+        "details": "Required for receiving NFTs"
+      },
+      "owner()": {
+        "details": "Returns the address of the current owner."
+      },
+      "proposeAgreement(address,uint256,uint256,uint256,uint256,uint256,uint256)": {
+        "details": "Propose a new investment agreement",
+        "params": {
+          "deliveryOrSaleDeadline": "Deadline for delivery or sale completion",
+          "expectedQuantity": "Expected yield in kg (informational)",
+          "harvestDeadline": "Deadline for marking harvest ready",
+          "investAmount": "Amount of ETH investment requested",
+          "investorShareBps": "Basis points (1/10,000) of sale proceeds for investor if SHARE_PROFITS",
+          "nftContract": "Address of the CropNFT contract",
+          "nftTokenId": "Token ID of the crop NFT"
+        },
+        "returns": {
+          "_0": "agreementId The ID of the created agreement"
+        }
+      },
+      "renounceOwnership()": {
+        "details": "Leaves the contract without owner. It will not be possible to call `onlyOwner` functions. Can only be called by the current owner. NOTE: Renouncing ownership will leave the contract without an owner, thereby disabling any functionality that is only available to the owner."
+      },
+      "reportSale(uint256,uint256)": {
+        "details": "Report sale and distribute proceeds (called by farmer for SHARE_PROFITS option)",
+        "params": {
+          "agreementId": "The ID of the agreement",
+          "saleAmount": "Total amount received from crop sale"
+        }
+      },
+      "setOracle(address)": {
+        "details": "Update oracle address (only owner)",
+        "params": {
+          "newOracle": "New oracle address"
+        }
+      },
+      "transferOwnership(address)": {
+        "details": "Transfers ownership of the contract to a new account (`newOwner`). Can only be called by the current owner."
+      }
+    },
+    "title": "InvestmentAgreement",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {},
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 323,
+        "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+        "label": "_status",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 8,
+        "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+        "label": "_owner",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 443,
+        "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+        "label": "agreementCounter",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 448,
+        "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+        "label": "agreements",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_mapping(t_uint256,t_struct(Agreement)441_storage)"
+      },
+      {
+        "astId": 450,
+        "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+        "label": "oracle",
+        "offset": 0,
+        "slot": "4",
+        "type": "t_address"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_enum(AgreementStatus)416": {
+        "encoding": "inplace",
+        "label": "enum InvestmentAgreement.AgreementStatus",
+        "numberOfBytes": "1"
+      },
+      "t_enum(FulfilmentOption)410": {
+        "encoding": "inplace",
+        "label": "enum InvestmentAgreement.FulfilmentOption",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_uint256,t_struct(Agreement)441_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct InvestmentAgreement.Agreement)",
+        "numberOfBytes": "32",
+        "value": "t_struct(Agreement)441_storage"
+      },
+      "t_struct(Agreement)441_storage": {
+        "encoding": "inplace",
+        "label": "struct InvestmentAgreement.Agreement",
+        "members": [
+          {
+            "astId": 418,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "farmer",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 420,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "investor",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address"
+          },
+          {
+            "astId": 422,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "cropNFT",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address"
+          },
+          {
+            "astId": 424,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "cropTokenId",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 426,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "investAmount",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 428,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "investorShareBps",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 430,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "expectedQuantity",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 433,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "option",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_enum(FulfilmentOption)410"
+          },
+          {
+            "astId": 435,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "harvestDeadline",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 437,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "deliveryOrSaleDeadline",
+            "offset": 0,
+            "slot": "9",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 440,
+            "contract": "contracts/InvestmentAgreement.sol:InvestmentAgreement",
+            "label": "status",
+            "offset": 0,
+            "slot": "10",
+            "type": "t_enum(AgreementStatus)416"
+          }
+        ],
+        "numberOfBytes": "352"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
